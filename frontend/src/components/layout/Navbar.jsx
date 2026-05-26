@@ -61,7 +61,7 @@ export function Navbar({ onOpenAuth, onToggleCart, onNavigate }) {
                 className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-text-muted hover:bg-bg-app transition-all font-medium text-xs border border-border-card cursor-pointer select-none"
               >
                 <Globe size={14} />
-                <span>{i18n.language === 'en' ? 'العربية' : 'English'}</span>
+                <span>{i18n.language.startsWith('ar') ? 'English' : 'العربية'}</span>
               </button>
 
               {/* Desktop-only Navigation Controls */}
