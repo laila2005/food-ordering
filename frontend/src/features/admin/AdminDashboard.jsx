@@ -256,7 +256,7 @@ export function AdminDashboard() {
             {t('admin.panelTitle')}
           </h1>
           <p className="text-xs font-bold text-text-muted mt-2">
-            Real-time fulfillment operational board
+            {t('admin.subtitle')}
           </p>
         </div>
 
@@ -291,10 +291,10 @@ export function AdminDashboard() {
             </span>
             <h3 className="text-3xl font-black text-text-main tracking-tight mt-1 flex items-baseline gap-1.5">
               <span>{pendingOrdersCount}</span>
-              <span className="text-[10px] text-text-muted font-bold tracking-normal uppercase">Active</span>
+              <span className="text-[10px] text-text-muted font-bold tracking-normal uppercase">{t('admin.activeQueue')}</span>
             </h3>
             <span className="block text-[10px] font-bold text-brand-primary mt-1">
-              Total Orders: {orders.length}
+              {t('admin.totalOrders', { count: orders.length })}
             </span>
           </div>
         </div>
@@ -306,13 +306,13 @@ export function AdminDashboard() {
           </div>
           <div>
             <span className="text-[10px] font-black text-text-main/80 uppercase tracking-widest">
-              Sales Volume
+              {t('admin.salesVolume')}
             </span>
             <h3 className="text-3xl font-black text-text-main tracking-tight mt-1">
               ${totalSales.toFixed(2)}
             </h3>
             <span className="block text-[10px] font-bold text-emerald-500 mt-1 uppercase tracking-wider">
-              Delivered Completed
+              {t('admin.deliveredCompleted')}
             </span>
           </div>
         </div>
@@ -324,14 +324,14 @@ export function AdminDashboard() {
           </div>
           <div>
             <span className="text-[10px] font-black text-text-main/80 uppercase tracking-widest">
-              Socket Connection
+              {t('admin.socketConnection')}
             </span>
             <h3 className="text-3xl font-black text-emerald-500 tracking-tight mt-1 flex items-center gap-2 dark:text-emerald-400">
               <span className="h-2 w-2 rounded-full bg-emerald-500 animate-pulse" />
-              <span>Active</span>
+              <span>{t('admin.socketActive')}</span>
             </h3>
             <span className="block text-[10px] font-bold text-text-muted mt-1 uppercase tracking-wider">
-              Live Broadcast Channel
+              {t('admin.liveBroadcast')}
             </span>
           </div>
         </div>
@@ -370,7 +370,7 @@ export function AdminDashboard() {
               {t('admin.incomingOrders')}
             </h2>
             <span className="px-3.5 py-1 bg-brand-light text-brand-text font-black text-[10px] rounded-full border border-brand-primary/10">
-              {pendingOrdersCount} Pending Action
+              {t('admin.pendingAction', { count: pendingOrdersCount })}
             </span>
           </div>
 
@@ -387,7 +387,7 @@ export function AdminDashboard() {
             </div>
           ) : orders.length === 0 ? (
             <div className="bg-bg-card rounded-3xl border border-border-card p-12 text-center text-xs font-semibold text-text-muted shadow-sm">
-              No orders found in database feed.
+              {t('admin.noOrders')}
             </div>
           ) : (
             <div className="space-y-4">
@@ -419,18 +419,18 @@ export function AdminDashboard() {
 
                       <div className="flex flex-wrap gap-4 text-xs font-bold text-text-muted">
                         <span>
-                          Total: <span className="text-text-main font-black">${order.totalAmount.toFixed(2)}</span>
+                          {t('admin.orderTotal')}: <span className="text-text-main font-black">${order.totalAmount.toFixed(2)}</span>
                         </span>
                         <span className="w-1 h-1 bg-border-card rounded-full self-center" />
                         <span>
-                          Payment: <span className="text-text-main">{order.paymentMethod}</span>
+                          {t('admin.orderPayment')}: <span className="text-text-main">{order.paymentMethod === 'CashOnDelivery' ? t('cart.cod') : order.paymentMethod}</span>
                         </span>
                       </div>
 
                       {/* Display Meal Items List */}
                       {order.items && order.items.length > 0 && (
                         <div className="mt-3 bg-bg-app border border-border-card/85 p-4 rounded-2xl max-w-xl space-y-2">
-                          <span className="block text-[9px] font-black text-text-main/80 uppercase tracking-widest border-b border-border-card pb-1.5">Ordered Items:</span>
+                          <span className="block text-[9px] font-black text-text-main/80 uppercase tracking-widest border-b border-border-card pb-1.5">{t('admin.orderedItems')}:</span>
                           {order.items.map((item, idx) => {
                             const name = item.productName[currentLang] || item.productName['en'] || 'Meal';
                             return (
@@ -448,24 +448,24 @@ export function AdminDashboard() {
                       {/* Delivery Address Details */}
                       <div className="text-xs text-text-muted font-semibold space-y-1.5 mt-2 bg-bg-app/40 border border-border-card/60 p-4 rounded-2xl max-w-xl">
                         <div>
-                          <span className="font-bold uppercase text-[9px] text-text-main/70 block mb-0.5">Deliver to:</span>{' '}
+                          <span className="font-bold uppercase text-[9px] text-text-main/70 block mb-0.5">{t('admin.deliverTo')}:</span>{' '}
                           <span className="text-text-main font-medium">{order.deliveryAddress}</span>
                         </div>
                         {order.addressDetails && (
                           <div className="border-t border-border-card/50 pt-1.5">
-                            <span className="font-bold uppercase text-[9px] text-text-main/70 block mb-0.5">Details / Landmark:</span>{' '}
+                            <span className="font-bold uppercase text-[9px] text-text-main/70 block mb-0.5">{t('admin.detailsLandmark')}:</span>{' '}
                             <span className="text-text-main font-medium">{order.addressDetails}</span>
                           </div>
                         )}
                         {order.phoneNumber && (
                           <div className="border-t border-border-card/50 pt-1.5">
-                            <span className="font-bold uppercase text-[9px] text-text-main/70 block mb-0.5">Phone Contact:</span>{' '}
+                            <span className="font-bold uppercase text-[9px] text-text-main/70 block mb-0.5">{t('admin.phoneContact')}:</span>{' '}
                             <span className="text-text-main font-medium">{order.phoneNumber}</span>
                           </div>
                         )}
                         {order.notes && (
                           <div className="border-t border-border-card/50 pt-1.5">
-                            <span className="font-bold uppercase text-[9px] text-brand-text block mb-0.5">Special Notes:</span>{' '}
+                            <span className="font-bold uppercase text-[9px] text-brand-text block mb-0.5">{t('admin.specialNotes')}:</span>{' '}
                             <span className="text-brand-text font-black italic bg-brand-light/50 px-3 py-1 rounded-lg border border-brand-primary/10 inline-block mt-0.5">
                               {order.notes}
                             </span>
@@ -491,11 +491,11 @@ export function AdminDashboard() {
                             : 'border-rose-200 bg-rose-50 text-rose-600 focus:ring-rose-500/20 dark:bg-rose-950/20'
                         }`}
                       >
-                        <option value="Pending">Pending Approval</option>
-                        <option value="Preparing">Preparing in Kitchen</option>
-                        <option value="OutForDelivery">Out for Delivery</option>
-                        <option value="Delivered">Delivered</option>
-                        <option value="Cancelled">Cancelled</option>
+                        <option value="Pending">{t('status.Pending')}</option>
+                        <option value="Preparing">{t('status.Preparing')}</option>
+                        <option value="OutForDelivery">{t('status.OutForDelivery')}</option>
+                        <option value="Delivered">{t('status.Delivered')}</option>
+                        <option value="Cancelled">{t('status.Cancelled')}</option>
                       </select>
                     </div>
 
