@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { useAuthStore } from '../../store/useAuthStore';
 import { useOrderTracking } from '../../hooks/useOrderTracking';
 import { ShieldCheck, Truck, Package, Utensils, CheckCircle, AlertTriangle, ArrowLeft } from 'lucide-react';
+import { STATIC_ORDERS } from '../../store/staticCatalog';
 
 export function OrderTracking({ orderId, onBack }) {
   const { t, i18n } = useTranslation();
@@ -32,7 +33,31 @@ export function OrderTracking({ orderId, onBack }) {
         setOrderDetails(data);
         setStatus(data.status); // Seed the tracking hook state with the database state
       } catch (err) {
-        console.error(err);
+        console.warn('API fetch order details failed, looking for offline fallback:', err);
+        const localOrders = JSON.parse(localStorage.getItem('mock_orders') || '[]');
+        const allOrders = [...localOrders, ...STATIC_ORDERS];
+        const foundOrder = allOrders.find(o => o.id === orderId);
+        if (foundOrder) {
+          setOrderDetails(foundOrder);
+          setStatus(foundOrder.status);
+        } else {
+          // If not found anywhere, create a quick fallback order
+          const fallbackOrder = {
+            id: orderId,
+            customerName: "Guest Customer",
+            createdAt: new Date().toISOString(),
+            totalAmount: 0.00,
+            paymentMethod: "CashOnDelivery",
+            deliveryAddress: "Mock Cloud Deployment Blvd",
+            addressDetails: "",
+            phoneNumber: "",
+            notes: "",
+            status: "Pending",
+            items: []
+          };
+          setOrderDetails(fallbackOrder);
+          setStatus(fallbackOrder.status);
+        }
       } finally {
         setFetchLoading(false);
       }

@@ -45,9 +45,13 @@ export function MenuGrid({ onProductAdded }) {
       } catch (err) {
         console.warn('API Offline/Mixed Content, falling back to static catalog:', err);
         setCategories(STATIC_CATEGORIES);
-        let staticProds = STATIC_PRODUCTS;
+        
+        const localProds = JSON.parse(localStorage.getItem('mock_products') || '[]');
+        const allProds = localProds.length > 0 ? localProds : STATIC_PRODUCTS;
+        
+        let staticProds = allProds;
         if (selectedCategory && selectedCategory !== 'favorites') {
-          staticProds = STATIC_PRODUCTS.filter(p => p.categoryId === selectedCategory);
+          staticProds = allProds.filter(p => p.categoryId === selectedCategory);
         }
         setProducts(staticProds);
         setError(null);

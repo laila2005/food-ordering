@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useAuthStore } from '../../store/useAuthStore';
 import { ShoppingBag, ArrowRight, Eye, Calendar, DollarSign, Clock } from 'lucide-react';
+import { STATIC_ORDERS } from '../../store/staticCatalog';
 
 export function OrderHistory({ onTrackOrder }) {
   const { t, i18n } = useTranslation();
@@ -32,7 +33,15 @@ export function OrderHistory({ onTrackOrder }) {
         const data = await response.json();
         setOrders(data);
       } catch (err) {
-        setError(err.message);
+        console.warn('API fetch orders failed, checking for offline fallback:', err);
+        if (err.message.includes('Failed to fetch') || err.message.includes('NetworkError') || err.message.includes('Failed') || err.message.includes('fetch')) {
+          const localOrders = JSON.parse(localStorage.getItem('mock_orders') || '[]');
+          const allOrders = [...localOrders, ...STATIC_ORDERS];
+          setOrders(allOrders);
+          setError(null);
+        } else {
+          setError(err.message);
+        }
       } finally {
         setLoading(false);
       }

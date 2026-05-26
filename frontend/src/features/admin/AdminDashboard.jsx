@@ -87,9 +87,15 @@ export function AdminDashboard() {
       }
     } catch (err) {
       console.warn('API Offline/Mixed Content, falling back to static dashboard:', err);
-      setOrders(STATIC_ORDERS);
+      const localOrders = JSON.parse(localStorage.getItem('mock_orders') || '[]');
+      const allOrders = [...localOrders, ...STATIC_ORDERS];
+      setOrders(allOrders);
       setCategories(STATIC_CATEGORIES);
-      setProducts(STATIC_PRODUCTS);
+      
+      const localProds = JSON.parse(localStorage.getItem('mock_products') || '[]');
+      const allProds = localProds.length > 0 ? localProds : STATIC_PRODUCTS;
+      setProducts(allProds);
+
       if (STATIC_CATEGORIES.length > 0 && !selectedCat) {
         setSelectedCat(STATIC_CATEGORIES[0].id);
       }
@@ -163,7 +169,23 @@ export function AdminDashboard() {
       
       showToast(`Order #${orderId.substring(0, 8)} updated to ${nextStatus}!`, 'success');
     } catch (err) {
-      showToast(err.message, 'error');
+      console.warn('Update status failed, checking for offline fallback:', err);
+      if (err.message.includes('Failed to fetch') || err.message.includes('NetworkError') || err.message.includes('Failed') || err.message.includes('fetch')) {
+        setOrders(prev => prev.map(order =>
+          order.id === orderId ? { ...order, status: nextStatus } : order
+        ));
+        
+        // Update in localStorage mock_orders if it exists there
+        const localOrders = JSON.parse(localStorage.getItem('mock_orders') || '[]');
+        const updatedLocal = localOrders.map(order =>
+          order.id === orderId ? { ...order, status: nextStatus } : order
+        );
+        localStorage.setItem('mock_orders', JSON.stringify(updatedLocal));
+
+        showToast(`[Demo] Order #${orderId.substring(0, 8)} updated to ${nextStatus}!`, 'success');
+      } else {
+        showToast(err.message, 'error');
+      }
     }
   };
 
@@ -212,7 +234,47 @@ export function AdminDashboard() {
       // Refresh list
       fetchDashboardData(false);
     } catch (err) {
-      showToast(err.message, 'error');
+      console.warn('Product add/edit failed, checking for offline fallback:', err);
+      if (err.message.includes('Failed to fetch') || err.message.includes('NetworkError') || err.message.includes('Failed') || err.message.includes('fetch')) {
+        const localProds = JSON.parse(localStorage.getItem('mock_products') || '[]');
+        const currentProds = localProds.length > 0 ? localProds : [...STATIC_PRODUCTS];
+
+        const fallbackProd = {
+          id: editingProductId || `prod-mock-${Date.now()}`,
+          name: { en: nameEn, ar: nameAr },
+          description: { en: descEn, ar: descAr },
+          price: parseFloat(price),
+          imageUrl,
+          categoryId: selectedCat,
+          isAvailable: true
+        };
+
+        let updatedProds = [];
+        if (editingProductId) {
+          updatedProds = currentProds.map(p => p.id === editingProductId ? fallbackProd : p);
+        } else {
+          updatedProds = [fallbackProd, ...currentProds];
+        }
+
+        localStorage.setItem('mock_products', JSON.stringify(updatedProds));
+        setProducts(updatedProds);
+
+        showToast(
+          editingProductId ? `[Demo] ${nameEn} updated successfully! 🍕` : `[Demo] ${nameEn} added successfully! 🍕`, 
+          'success'
+        );
+
+        setShowAddMenu(false);
+        setEditingProductId(null);
+        setNameEn('');
+        setNameAr('');
+        setDescEn('');
+        setDescAr('');
+        setPrice('');
+        setImageUrl('');
+      } else {
+        showToast(err.message, 'error');
+      }
     }
   };
 
@@ -246,7 +308,19 @@ export function AdminDashboard() {
       showToast(`${name} deleted successfully.`, 'info');
       setProducts(prev => prev.filter(p => p.id !== productId));
     } catch (err) {
-      showToast(err.message, 'error');
+      console.warn('Product delete failed, checking for offline fallback:', err);
+      if (err.message.includes('Failed to fetch') || err.message.includes('NetworkError') || err.message.includes('Failed') || err.message.includes('fetch')) {
+        const localProds = JSON.parse(localStorage.getItem('mock_products') || '[]');
+        const currentProds = localProds.length > 0 ? localProds : [...STATIC_PRODUCTS];
+
+        const updatedProds = currentProds.filter(p => p.id !== productId);
+        localStorage.setItem('mock_products', JSON.stringify(updatedProds));
+        setProducts(updatedProds);
+
+        showToast(`[Demo] ${name} deleted successfully.`, 'info');
+      } else {
+        showToast(err.message, 'error');
+      }
     }
   };
 
