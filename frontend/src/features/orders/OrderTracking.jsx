@@ -7,10 +7,11 @@ import { STATIC_ORDERS } from '../../store/staticCatalog';
 
 export function OrderTracking({ orderId, onBack }) {
   const { t, i18n } = useTranslation();
-  const { token } = useAuthStore();
+  const { token, user } = useAuthStore();
   const { status, setStatus, loading, error } = useOrderTracking(orderId, token);
   const [orderDetails, setOrderDetails] = useState(null);
   const [fetchLoading, setFetchLoading] = useState(true);
+  const [accessError, setAccessError] = useState(null);
 
   const currentLang = i18n.language.startsWith('ar') ? 'ar' : 'en';
   const isRtl = i18n.language.startsWith('ar');
@@ -38,6 +39,12 @@ export function OrderTracking({ orderId, onBack }) {
         const allOrders = [...localOrders, ...STATIC_ORDERS];
         const foundOrder = allOrders.find(o => o.id === orderId);
         if (foundOrder) {
+          // Check ownership
+          if (foundOrder.userId && foundOrder.userId !== user?.id) {
+            setAccessError("Access Denied: You do not have permission to track this order.");
+            setFetchLoading(false);
+            return;
+          }
           setOrderDetails(foundOrder);
           setStatus(foundOrder.status);
         } else {
@@ -66,7 +73,31 @@ export function OrderTracking({ orderId, onBack }) {
     if (orderId && token) {
       fetchOrderDetails();
     }
-  }, [orderId, token]);
+  }, [orderId, token, user?.id]);
+
+  if (accessError) {
+    return (
+      <div className="max-w-md mx-auto space-y-6 py-20 text-center animate-in fade-in zoom-in-95 duration-300">
+        <div className="bg-bg-card rounded-3xl border border-border-card p-10 flex flex-col items-center justify-center space-y-5 shadow-xl">
+          <div className="p-4 bg-rose-500/10 text-rose-500 rounded-full border border-rose-500/10 animate-bounce">
+            <AlertTriangle size={36} />
+          </div>
+          <h2 className="text-xl font-black text-text-main tracking-tight">
+            {t('orders.accessDenied', 'Access Denied')}
+          </h2>
+          <p className="text-xs text-text-muted font-bold max-w-[280px] leading-relaxed">
+            {accessError}
+          </p>
+          <button
+            onClick={onBack}
+            className="px-6 py-3 bg-bg-app hover:bg-rose-500 hover:text-white text-text-main font-extrabold text-xs rounded-2xl transition-all shadow-xs border border-border-card hover:border-rose-500 cursor-pointer"
+          >
+            {t('orders.backToDashboard')}
+          </button>
+        </div>
+      </div>
+    );
+  }
 
   if (fetchLoading || loading) {
     return (

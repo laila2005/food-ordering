@@ -105,6 +105,7 @@ export function CartDrawer({ isOpen, onClose, onOpenAuth, onCheckoutSuccess }) {
         const mockOrderId = `order-mock-${Date.now()}`;
         const mockOrder = {
           id: mockOrderId,
+          userId: user?.id,
           customerName: user?.fullName || user?.email?.split('@')[0] || "Guest Customer",
           createdAt: new Date().toISOString(),
           totalAmount: getTotalAmount(),

@@ -6,7 +6,7 @@ import { STATIC_ORDERS } from '../../store/staticCatalog';
 
 export function OrderHistory({ onTrackOrder }) {
   const { t, i18n } = useTranslation();
-  const { token } = useAuthStore();
+  const { token, user } = useAuthStore();
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -36,7 +36,8 @@ export function OrderHistory({ onTrackOrder }) {
         console.warn('API fetch orders failed, checking for offline fallback:', err);
         if (err.message.includes('Failed to fetch') || err.message.includes('NetworkError') || err.message.includes('Failed') || err.message.includes('fetch')) {
           const localOrders = JSON.parse(localStorage.getItem('mock_orders') || '[]');
-          const allOrders = [...localOrders, ...STATIC_ORDERS];
+          const myLocalOrders = localOrders.filter(o => o.userId === user?.id);
+          const allOrders = [...myLocalOrders, ...STATIC_ORDERS];
           setOrders(allOrders);
           setError(null);
         } else {

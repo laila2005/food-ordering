@@ -55,7 +55,8 @@ export function TrackDashboard({ onTrackOrder, onNavigate }) {
         console.warn('API fetch active orders failed, looking for offline fallback:', err);
         if (err.message.includes('Failed to fetch') || err.message.includes('NetworkError') || err.message.includes('Failed') || err.message.includes('fetch')) {
           const localOrders = JSON.parse(localStorage.getItem('mock_orders') || '[]');
-          const allOrders = [...localOrders, ...STATIC_ORDERS];
+          const myLocalOrders = localOrders.filter(o => o.userId === user?.id);
+          const allOrders = [...myLocalOrders, ...STATIC_ORDERS];
           const active = allOrders.filter(order => order.status !== 'Delivered' && order.status !== 'Cancelled');
           setActiveOrders(active);
           setError(null);
