@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { ProductCard } from './ProductCard';
 
-export function MenuGrid() {
+export function MenuGrid({ onProductAdded }) {
   const { t, i18n } = useTranslation();
   const [categories, setCategories] = useState([]);
   const [products, setProducts] = useState([]);
@@ -104,7 +104,7 @@ export function MenuGrid() {
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
           {products.map((prod) => (
-            <ProductCard key={prod.id} product={prod} />
+            <ProductCard key={prod.id} product={prod} onProductAdded={onProductAdded} />
           ))}
         </div>
       )}

@@ -19,44 +19,50 @@ namespace FoodOrdering.Infrastructure.Data
         {
             base.OnModelCreating(modelBuilder);
 
-            // Configure multi-language columns as JSONB in PostgreSQL
-            modelBuilder.Entity<Category>(entity =>
+            if (Database.ProviderName == "Npgsql.EntityFrameworkCore.PostgreSQL")
             {
-                entity.Property(c => c.Name)
-                    .HasColumnType("jsonb")
-                    .IsRequired();
-            });
+                // Configure multi-language columns as JSONB in PostgreSQL
+                modelBuilder.Entity<Category>(entity =>
+                {
+                    entity.Property(c => c.Name)
+                        .HasColumnType("jsonb")
+                        .IsRequired();
+                });
 
-            modelBuilder.Entity<Product>(entity =>
-            {
-                entity.Property(p => p.Name)
-                    .HasColumnType("jsonb")
-                    .IsRequired();
+                modelBuilder.Entity<Product>(entity =>
+                {
+                    entity.Property(p => p.Name)
+                        .HasColumnType("jsonb")
+                        .IsRequired();
 
-                entity.Property(p => p.Description)
-                    .HasColumnType("jsonb")
-                    .IsRequired();
+                    entity.Property(p => p.Description)
+                        .HasColumnType("jsonb")
+                        .IsRequired();
 
-                entity.Property(p => p.Price)
-                    .HasColumnType("decimal(18,2)")
-                    .IsRequired();
-            });
+                    entity.Property(p => p.Price)
+                        .HasColumnType("decimal(18,2)")
+                        .IsRequired();
+                });
+
+                modelBuilder.Entity<Order>(entity =>
+                {
+                    entity.Property(o => o.TotalAmount)
+                        .HasColumnType("decimal(18,2)")
+                        .IsRequired();
+                });
+
+                modelBuilder.Entity<OrderItem>(entity =>
+                {
+                    entity.Property(oi => oi.UnitPrice)
+                        .HasColumnType("decimal(18,2)")
+                        .IsRequired();
+                });
+            }
 
             modelBuilder.Entity<Order>(entity =>
             {
-                entity.Property(o => o.TotalAmount)
-                    .HasColumnType("decimal(18,2)")
-                    .IsRequired();
-
                 entity.Property(o => o.Status)
                     .HasConversion<string>();
-            });
-
-            modelBuilder.Entity<OrderItem>(entity =>
-            {
-                entity.Property(oi => oi.UnitPrice)
-                    .HasColumnType("decimal(18,2)")
-                    .IsRequired();
             });
         }
     }

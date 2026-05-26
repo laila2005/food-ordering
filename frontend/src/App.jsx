@@ -44,7 +44,7 @@ export default function App() {
       />
 
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {activePage === 'menu' && <MenuGrid />}
+        {activePage === 'menu' && <MenuGrid onProductAdded={() => setIsCartOpen(true)} />}
         {activePage === 'orders' && <OrderHistory onTrackOrder={handleTrackOrder} />}
         {activePage === 'tracking' && selectedOrderId && <OrderTracking orderId={selectedOrderId} />}
         {activePage === 'admin' && <AdminDashboard />}

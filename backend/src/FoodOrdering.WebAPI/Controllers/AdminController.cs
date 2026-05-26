@@ -118,6 +118,41 @@ namespace FoodOrdering.WebAPI.Controllers
             return Ok(new { ProductId = product.Id });
         }
 
+        [HttpPut("products/{id}")]
+        public async Task<IActionResult> UpdateProduct(Guid id, [FromBody] CreateProductDto dto)
+        {
+            var product = await _context.Products.FirstOrDefaultAsync(p => p.Id == id);
+            if (product == null)
+            {
+                return NotFound();
+            }
+
+            product.Name = JsonSerializer.Serialize(dto.Name);
+            product.Description = JsonSerializer.Serialize(dto.Description);
+            product.Price = dto.Price;
+            product.ImageUrl = dto.ImageUrl;
+            product.CategoryId = dto.CategoryId;
+
+            await _context.SaveChangesAsync();
+
+            return Ok(new { ProductId = product.Id });
+        }
+
+        [HttpDelete("products/{id}")]
+        public async Task<IActionResult> DeleteProduct(Guid id)
+        {
+            var product = await _context.Products.FirstOrDefaultAsync(p => p.Id == id);
+            if (product == null)
+            {
+                return NotFound();
+            }
+
+            _context.Products.Remove(product);
+            await _context.SaveChangesAsync();
+
+            return Ok(new { Message = "Product deleted successfully." });
+        }
+
         [HttpPost("categories")]
         public async Task<IActionResult> CreateCategory([FromBody] CategoryDto dto)
         {

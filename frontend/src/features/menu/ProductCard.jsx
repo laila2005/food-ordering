@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { useCartStore } from '../../store/useCartStore';
 import { Plus, ShoppingCart } from 'lucide-react';
 
-export function ProductCard({ product }) {
+export function ProductCard({ product, onProductAdded }) {
   const { t, i18n } = useTranslation();
   const { addItem } = useCartStore();
 
@@ -54,9 +54,14 @@ export function ProductCard({ product }) {
           </div>
 
           <button
-            onClick={() => product.isAvailable && addItem(product)}
+            onClick={() => {
+              if (product.isAvailable) {
+                addItem(product);
+                if (onProductAdded) onProductAdded();
+              }
+            }}
             disabled={!product.isAvailable}
-            className="flex items-center gap-1.5 px-4 py-2.5 bg-slate-100 hover:bg-amber-500 hover:text-white text-slate-700 font-extrabold text-xs rounded-2xl transition-all shadow-sm group-active:scale-95 disabled:opacity-50 disabled:hover:bg-slate-100 disabled:hover:text-slate-700"
+            className="flex items-center gap-1.5 px-4 py-2.5 bg-slate-100 hover:bg-amber-500 hover:text-white text-slate-700 font-extrabold text-xs rounded-2xl transition-all shadow-sm group-active:scale-95 disabled:opacity-50 disabled:hover:bg-slate-100 disabled:hover:text-slate-700 cursor-pointer"
           >
             <Plus size={14} />
             <span>{t('menu.addToCart')}</span>
