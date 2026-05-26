@@ -50,6 +50,9 @@ namespace FoodOrdering.WebAPI.Controllers
                 PaymentStatus = o.PaymentStatus,
                 TotalAmount = o.TotalAmount,
                 DeliveryAddress = o.DeliveryAddress,
+                PhoneNumber = o.PhoneNumber,
+                AddressDetails = o.AddressDetails,
+                Notes = o.Notes,
                 CreatedAt = o.CreatedAt,
                 Items = o.OrderItems.Select(oi => new OrderItemResponseDto
                 {

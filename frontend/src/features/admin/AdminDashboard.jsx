@@ -89,6 +89,11 @@ export function AdminDashboard() {
           totalAmount: newOrder.totalAmount,
           status: newOrder.status,
           createdAt: newOrder.createdAt,
+          phoneNumber: newOrder.phoneNumber,
+          addressDetails: newOrder.addressDetails,
+          notes: newOrder.notes,
+          deliveryAddress: newOrder.deliveryAddress,
+          paymentMethod: newOrder.paymentMethod,
           items: [] // fetch full details if clicked, or just show summary in real-time
         },
         ...prev
@@ -411,8 +416,11 @@ export function AdminDashboard() {
                       Status: <span className="text-amber-500">{t(`status.${order.status}`)}</span>
                     </span>
                   </div>
-                  <div className="text-[10px] text-slate-400 font-semibold leading-none">
-                    Deliver to: {order.deliveryAddress}
+                  <div className="text-[10px] text-slate-400 font-semibold space-y-1 mt-1">
+                    <div><span className="font-extrabold uppercase text-[9px] text-slate-400/80">Deliver to:</span> <span className="text-slate-600 font-bold">{order.deliveryAddress}</span></div>
+                    {order.addressDetails && <div><span className="font-extrabold uppercase text-[9px] text-slate-400/80">Landmark:</span> <span className="text-slate-600 font-bold">{order.addressDetails}</span></div>}
+                    {order.phoneNumber && <div><span className="font-extrabold uppercase text-[9px] text-slate-400/80">Phone:</span> <span className="text-slate-600 font-bold">{order.phoneNumber}</span></div>}
+                    {order.notes && <div className="pt-0.5"><span className="font-extrabold uppercase text-[9px] text-amber-600">Note:</span> <span className="text-amber-600 font-extrabold italic bg-amber-50 px-2 py-0.5 rounded-md border border-amber-100/40 inline-block">{order.notes}</span></div>}
                   </div>
                 </div>
 

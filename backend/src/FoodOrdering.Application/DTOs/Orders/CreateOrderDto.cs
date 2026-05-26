@@ -7,6 +7,9 @@ namespace FoodOrdering.Application.DTOs.Orders
     {
         public string PaymentMethod { get; set; } = "CashOnDelivery"; // "Stripe", "CashOnDelivery"
         public string DeliveryAddress { get; set; } = string.Empty;
+        public string PhoneNumber { get; set; } = string.Empty;
+        public string? AddressDetails { get; set; }
+        public string? Notes { get; set; }
         public List<CreateOrderItemDto> Items { get; set; } = new();
     }
 

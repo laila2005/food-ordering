@@ -65,6 +65,9 @@ async function runTests() {
     body: JSON.stringify({
       paymentMethod: 'CashOnDelivery',
       deliveryAddress: '123 E2E Test Boulevard',
+      phoneNumber: '+1234567890',
+      addressDetails: 'Landmark: Near Main Park, Floor 3',
+      notes: 'Please leave the food on the porch',
       items: [{ productId: testProduct.id, quantity: 2 }]
     })
   });

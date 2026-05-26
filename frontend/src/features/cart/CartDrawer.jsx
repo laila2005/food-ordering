@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useCartStore } from '../../store/useCartStore';
 import { useAuthStore } from '../../store/useAuthStore';
-import { X, Plus, Minus, Trash2, MapPin, CreditCard, DollarSign } from 'lucide-react';
+import { X, Plus, Minus, Trash2, MapPin, CreditCard, DollarSign, Phone, Info, FileText } from 'lucide-react';
 
 export function CartDrawer({ isOpen, onClose, onOpenAuth, onCheckoutSuccess }) {
   const { t, i18n } = useTranslation();
@@ -10,6 +10,9 @@ export function CartDrawer({ isOpen, onClose, onOpenAuth, onCheckoutSuccess }) {
   const { items, addItem, removeItem, clearCart, getTotalAmount } = useCartStore();
   
   const [address, setAddress] = useState('');
+  const [phone, setPhone] = useState('');
+  const [landmark, setLandmark] = useState('');
+  const [notes, setNotes] = useState('');
   const [paymentMethod, setPaymentMethod] = useState('CashOnDelivery');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
@@ -32,12 +35,20 @@ export function CartDrawer({ isOpen, onClose, onOpenAuth, onCheckoutSuccess }) {
       return;
     }
 
+    if (!phone.trim()) {
+      setError(t('cart.phoneRequired'));
+      return;
+    }
+
     setLoading(true);
 
     const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:5000';
     const orderBody = {
       paymentMethod,
       deliveryAddress: address,
+      phoneNumber: phone,
+      addressDetails: landmark,
+      notes: notes,
       items: items.map(item => ({
         productId: item.product.id,
         quantity: item.quantity
@@ -54,13 +65,21 @@ export function CartDrawer({ isOpen, onClose, onOpenAuth, onCheckoutSuccess }) {
         body: JSON.stringify(orderBody)
       });
 
-      const data = await response.json();
+      let data = null;
+      const contentType = response.headers.get("content-type");
+      if (contentType && contentType.includes("application/json")) {
+        data = await response.json();
+      }
+
       if (!response.ok) {
-        throw new Error(data.message || 'Error creating order.');
+        throw new Error(data?.message || 'Error creating order.');
       }
 
       clearCart();
       setAddress('');
+      setPhone('');
+      setLandmark('');
+      setNotes('');
       onCheckoutSuccess(data.orderId);
       onClose();
     } catch (err) {
@@ -170,6 +189,52 @@ export function CartDrawer({ isOpen, onClose, onOpenAuth, onCheckoutSuccess }) {
                       onChange={(e) => setAddress(e.target.value)}
                       className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-2xl text-xs text-slate-800 font-semibold focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 transition-colors"
                       placeholder="123 Main St, Apartment 4B"
+                    />
+                  </div>
+
+                  {/* Phone Number */}
+                  <div>
+                    <label className="block text-xs font-bold text-slate-600 mb-1.5 uppercase tracking-wide flex items-center gap-1">
+                      <Phone size={12} />
+                      <span>{t('cart.phone')}</span>
+                    </label>
+                    <input
+                      type="tel"
+                      required
+                      value={phone}
+                      onChange={(e) => setPhone(e.target.value)}
+                      className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-2xl text-xs text-slate-800 font-semibold focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 transition-colors"
+                      placeholder="+1 (555) 123-4567"
+                    />
+                  </div>
+
+                  {/* Landmark / Address Details */}
+                  <div>
+                    <label className="block text-xs font-bold text-slate-600 mb-1.5 uppercase tracking-wide flex items-center gap-1">
+                      <Info size={12} />
+                      <span>{t('cart.landmark')}</span>
+                    </label>
+                    <input
+                      type="text"
+                      value={landmark}
+                      onChange={(e) => setLandmark(e.target.value)}
+                      className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-2xl text-xs text-slate-800 font-semibold focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 transition-colors"
+                      placeholder="e.g. Near Grand Mosque, Floor 3, Apt 12"
+                    />
+                  </div>
+
+                  {/* Notes / Special Instructions */}
+                  <div>
+                    <label className="block text-xs font-bold text-slate-600 mb-1.5 uppercase tracking-wide flex items-center gap-1">
+                      <FileText size={12} />
+                      <span>{t('cart.notes')}</span>
+                    </label>
+                    <textarea
+                      rows="2"
+                      value={notes}
+                      onChange={(e) => setNotes(e.target.value)}
+                      className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-2xl text-xs text-slate-800 font-semibold focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 transition-colors"
+                      placeholder="e.g. Leave order at front desk, ring bell..."
                     />
                   </div>
 

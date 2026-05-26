@@ -13,6 +13,9 @@ namespace FoodOrdering.Application.DTOs.Orders
         public string PaymentStatus { get; set; } = string.Empty;
         public decimal TotalAmount { get; set; }
         public string DeliveryAddress { get; set; } = string.Empty;
+        public string PhoneNumber { get; set; } = string.Empty;
+        public string? AddressDetails { get; set; }
+        public string? Notes { get; set; }
         public DateTime CreatedAt { get; set; }
         public List<OrderItemResponseDto> Items { get; set; } = new();
     }

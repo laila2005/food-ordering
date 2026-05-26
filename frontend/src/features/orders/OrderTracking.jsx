@@ -162,9 +162,30 @@ export function OrderTracking({ orderId }) {
               <h3 className="font-extrabold text-sm text-slate-800 tracking-tight">
                 {t('orders.address')}
               </h3>
-              <p className="text-xs font-semibold text-slate-500 leading-relaxed bg-slate-50/50 p-4 border border-slate-100 rounded-2xl">
-                {orderDetails.deliveryAddress}
-              </p>
+              <div className="text-xs font-semibold text-slate-500 leading-relaxed bg-slate-50/50 p-4 border border-slate-100 rounded-2xl space-y-2.5">
+                <div>
+                  <span className="block text-[10px] font-black uppercase text-slate-400 mb-0.5">{t('orders.address')}</span>
+                  <span className="text-slate-700">{orderDetails.deliveryAddress}</span>
+                </div>
+                {orderDetails.addressDetails && (
+                  <div>
+                    <span className="block text-[10px] font-black uppercase text-slate-400 mb-0.5">{t('orders.landmark')}</span>
+                    <span className="text-slate-700">{orderDetails.addressDetails}</span>
+                  </div>
+                )}
+                {orderDetails.phoneNumber && (
+                  <div>
+                    <span className="block text-[10px] font-black uppercase text-slate-400 mb-0.5">{t('orders.phone')}</span>
+                    <span className="text-slate-700">{orderDetails.phoneNumber}</span>
+                  </div>
+                )}
+                {orderDetails.notes && (
+                  <div className="border-t border-slate-200/60 pt-2">
+                    <span className="block text-[10px] font-black uppercase text-amber-600 mb-0.5">{t('orders.notes')}</span>
+                    <span className="text-slate-600 italic bg-amber-50/20 p-2 rounded-lg border border-amber-100/50 block">{orderDetails.notes}</span>
+                  </div>
+                )}
+              </div>
             </div>
 
             {/* Order contents */}

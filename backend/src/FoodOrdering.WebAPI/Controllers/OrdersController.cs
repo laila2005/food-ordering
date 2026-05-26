@@ -58,6 +58,9 @@ namespace FoodOrdering.WebAPI.Controllers
             {
                 UserId = userId,
                 DeliveryAddress = dto.DeliveryAddress,
+                PhoneNumber = dto.PhoneNumber,
+                AddressDetails = dto.AddressDetails,
+                Notes = dto.Notes,
                 PaymentMethod = dto.PaymentMethod,
                 Status = OrderStatus.Pending,
                 PaymentStatus = dto.PaymentMethod == "Stripe" ? "Paid" : "Pending", // Mock Stripe payments as automatically succeeded
@@ -91,7 +94,12 @@ namespace FoodOrdering.WebAPI.Controllers
                 CustomerName = user?.FullName ?? "Customer",
                 TotalAmount = order.TotalAmount,
                 Status = order.Status.ToString(),
-                CreatedAt = order.CreatedAt
+                CreatedAt = order.CreatedAt,
+                PhoneNumber = order.PhoneNumber,
+                AddressDetails = order.AddressDetails,
+                Notes = order.Notes,
+                DeliveryAddress = order.DeliveryAddress,
+                PaymentMethod = order.PaymentMethod
             });
 
             return Ok(new { OrderId = order.Id, TotalAmount = order.TotalAmount, Status = order.Status.ToString() });
@@ -122,6 +130,9 @@ namespace FoodOrdering.WebAPI.Controllers
                 PaymentStatus = o.PaymentStatus,
                 TotalAmount = o.TotalAmount,
                 DeliveryAddress = o.DeliveryAddress,
+                PhoneNumber = o.PhoneNumber,
+                AddressDetails = o.AddressDetails,
+                Notes = o.Notes,
                 CreatedAt = o.CreatedAt,
                 Items = o.OrderItems.Select(oi => new OrderItemResponseDto
                 {
@@ -173,6 +184,9 @@ namespace FoodOrdering.WebAPI.Controllers
                 PaymentStatus = order.PaymentStatus,
                 TotalAmount = order.TotalAmount,
                 DeliveryAddress = order.DeliveryAddress,
+                PhoneNumber = order.PhoneNumber,
+                AddressDetails = order.AddressDetails,
+                Notes = order.Notes,
                 CreatedAt = order.CreatedAt,
                 Items = order.OrderItems.Select(oi => new OrderItemResponseDto
                 {
