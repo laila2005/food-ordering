@@ -7,7 +7,8 @@
     "register": "Register",
     "dashboard": "Admin Panel",
     "logout": "Logout",
-    "myOrders": "My Orders"
+    "myOrders": "My Orders",
+    "trackOrder": "Track Order"
   },
   "auth": {
     "loginTitle": "Welcome Back",
@@ -25,6 +26,7 @@
     "title": "Our Delicious Menu",
     "subtitle": "Fresh ingredients, fast delivery, outstanding taste",
     "all": "All Categories",
+    "favorites": "Favorites (❤️)",
     "addToCart": "Add to Cart",
     "price": "Price",
     "outOfStock": "Unavailable"
@@ -57,7 +59,18 @@
     "historyTitle": "Your Past Orders",
     "noOrders": "You haven't ordered anything yet.",
     "itemsCount": "items",
-    "trackBtn": "Track Live"
+    "trackBtn": "Track Live",
+    "trackDashboard": "Track Your Orders",
+    "activeOrders": "Active Orders",
+    "noActiveOrders": "No Active Orders",
+    "enterOrderId": "Enter Order ID to track directly",
+    "orderIdPlaceholder": "Enter or paste your Order ID here...",
+    "backToDashboard": "Back to Tracking Dashboard",
+    "orderSearchBtn": "Track Order",
+    "orderSearchError": "Please enter a valid Order ID.",
+    "quickShortcuts": "Quick Shortcuts",
+    "browseMenu": "Browse Menu",
+    "viewPastOrders": "View Past Orders"
   },
   "admin": {
     "panelTitle": "Admin Dashboard",
@@ -68,7 +81,15 @@
     "items": "Items",
     "actions": "Actions",
     "addProduct": "Add Product",
-    "addCategory": "Add Category"
+    "addCategory": "Add Category",
+    "catalogTitle": "Menu Catalog Management",
+    "catalogSearchPlaceholder": "Search catalog dishes...",
+    "catalogNoMatch": "No catalog products match your search or filter criteria.",
+    "tableProduct": "Product",
+    "tableCategory": "Category",
+    "tableDescription": "Description",
+    "tablePrice": "Price",
+    "filterAllCategories": "All Categories"
   },
   "status": {
     "Pending": "Pending Approval",

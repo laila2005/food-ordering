@@ -46,6 +46,38 @@ namespace FoodOrdering.Infrastructure.Data
 
             if (await context.Categories.AnyAsync())
             {
+                var existingDessert = await context.Categories
+                    .FirstOrDefaultAsync(c => c.Name.Contains("\"en\":\"Dessert\"") || c.Name.Contains("\"en\": \"Dessert\"") || c.Name.Contains("حلويات"));
+                if (existingDessert == null)
+                {
+                    var newDessert = new Category
+                    {
+                        Name = JsonSerializer.Serialize(new Dictionary<string, string> { { "en", "Dessert" }, { "ar", "حلويات" } }),
+                        ImageUrl = "https://images.unsplash.com/photo-1587314168485-3236d6710814?auto=format&fit=crop&w=400&q=80"
+                    };
+                    context.Categories.Add(newDessert);
+                    await context.SaveChangesAsync();
+
+                    var dessertProds = new List<Product>
+                    {
+                        new() {
+                            Name = JsonSerializer.Serialize(new Dictionary<string, string> { { "en", "Chocolate Fudge Cake" }, { "ar", "كعكة الشوكولاتة الداكنة" } }),
+                            Description = JsonSerializer.Serialize(new Dictionary<string, string> { { "en", "Rich and moist chocolate cake layered with chocolate fudge frosting." }, { "ar", "كعكة شوكولاتة غنية ورطبة مغطاة بصلصة الفدج اللذيذة." } }),
+                            Price = 5.99m,
+                            ImageUrl = "https://images.unsplash.com/photo-1606313564200-e75d5e30476c?auto=format&fit=crop&w=400&q=80",
+                            CategoryId = newDessert.Id
+                        },
+                        new() {
+                            Name = JsonSerializer.Serialize(new Dictionary<string, string> { { "en", "Strawberry Cheesecake" }, { "ar", "تشيز كيك الفراولة" } }),
+                            Description = JsonSerializer.Serialize(new Dictionary<string, string> { { "en", "Creamy cheesecake on a graham cracker crust with strawberry topping." }, { "ar", "تشيز كيك كريمي مع بسكويت غراهام وتوت الفراولة الطازج." } }),
+                            Price = 6.49m,
+                            ImageUrl = "https://images.unsplash.com/photo-1533134242443-d4fd215305ad?auto=format&fit=crop&w=400&q=80",
+                            CategoryId = newDessert.Id
+                        }
+                    };
+                    context.Products.AddRange(dessertProds);
+                    await context.SaveChangesAsync();
+                }
                 return;
             }
 
@@ -63,6 +95,10 @@ namespace FoodOrdering.Infrastructure.Data
                 new() {
                     Name = JsonSerializer.Serialize(new Dictionary<string, string> { { "en", "Drinks" }, { "ar", "مشروبات" } }),
                     ImageUrl = "https://images.unsplash.com/photo-1543007630-9710e4a00a20?auto=format&fit=crop&w=400&q=80"
+                },
+                new() {
+                    Name = JsonSerializer.Serialize(new Dictionary<string, string> { { "en", "Dessert" }, { "ar", "حلويات" } }),
+                    ImageUrl = "https://images.unsplash.com/photo-1587314168485-3236d6710814?auto=format&fit=crop&w=400&q=80"
                 }
             };
 
@@ -73,6 +109,7 @@ namespace FoodOrdering.Infrastructure.Data
             var burgersCategory = categories[0];
             var pizzaCategory = categories[1];
             var drinksCategory = categories[2];
+            var dessertCategory = categories[3];
 
             var products = new List<Product>
             {
@@ -117,6 +154,20 @@ namespace FoodOrdering.Infrastructure.Data
                     Price = 3.49m,
                     ImageUrl = "https://images.unsplash.com/photo-1621506289937-a8e4df240d0b?auto=format&fit=crop&w=400&q=80",
                     CategoryId = drinksCategory.Id
+                },
+                new() {
+                    Name = JsonSerializer.Serialize(new Dictionary<string, string> { { "en", "Chocolate Fudge Cake" }, { "ar", "كعكة الشوكولاتة الداكنة" } }),
+                    Description = JsonSerializer.Serialize(new Dictionary<string, string> { { "en", "Rich and moist chocolate cake layered with chocolate fudge frosting." }, { "ar", "كعكة شوكولاتة غنية ورطبة مغطاة بصلصة الفدج اللذيذة." } }),
+                    Price = 5.99m,
+                    ImageUrl = "https://images.unsplash.com/photo-1606313564200-e75d5e30476c?auto=format&fit=crop&w=400&q=80",
+                    CategoryId = dessertCategory.Id
+                },
+                new() {
+                    Name = JsonSerializer.Serialize(new Dictionary<string, string> { { "en", "Strawberry Cheesecake" }, { "ar", "تشيز كيك الفراولة" } }),
+                    Description = JsonSerializer.Serialize(new Dictionary<string, string> { { "en", "Creamy cheesecake on a graham cracker crust with strawberry topping." }, { "ar", "تشيز كيك كريمي مع بسكويت غراهام وتوت الفراولة الطازج." } }),
+                    Price = 6.49m,
+                    ImageUrl = "https://images.unsplash.com/photo-1533134242443-d4fd215305ad?auto=format&fit=crop&w=400&q=80",
+                    CategoryId = dessertCategory.Id
                 }
             };
 

@@ -2,9 +2,9 @@ import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useAuthStore } from '../../store/useAuthStore';
 import { useOrderTracking } from '../../hooks/useOrderTracking';
-import { ShieldCheck, Truck, Package, Utensils, CheckCircle, AlertTriangle } from 'lucide-react';
+import { ShieldCheck, Truck, Package, Utensils, CheckCircle, AlertTriangle, ArrowLeft } from 'lucide-react';
 
-export function OrderTracking({ orderId }) {
+export function OrderTracking({ orderId, onBack }) {
   const { t, i18n } = useTranslation();
   const { token } = useAuthStore();
   const { status, setStatus, loading, error } = useOrderTracking(orderId, token);
@@ -12,6 +12,7 @@ export function OrderTracking({ orderId }) {
   const [fetchLoading, setFetchLoading] = useState(true);
 
   const currentLang = i18n.language.startsWith('ar') ? 'ar' : 'en';
+  const isRtl = i18n.language.startsWith('ar');
 
   useEffect(() => {
     // Fetch initial order details
@@ -64,33 +65,44 @@ export function OrderTracking({ orderId }) {
   const isCancelled = status === 'Cancelled';
 
   return (
-    <div className="max-w-3xl mx-auto space-y-8 animate-in fade-in zoom-in-95 duration-300">
+    <div className="max-w-3xl mx-auto space-y-6 animate-in fade-in zoom-in-95 duration-300">
       
+      {/* Back button */}
+      {onBack && (
+        <button
+          onClick={onBack}
+          className="inline-flex items-center gap-2 px-4 py-2.5 bg-bg-card hover:bg-bg-app text-text-muted hover:text-text-main font-extrabold text-xs rounded-2xl shadow-xs border border-border-card transition-all cursor-pointer select-none"
+        >
+          <ArrowLeft size={14} className={isRtl ? 'rotate-180' : ''} />
+          <span>{t('orders.backToDashboard')}</span>
+        </button>
+      )}
+
       {/* Title */}
       <div className="text-center space-y-2">
-        <h1 className="text-3xl font-black text-slate-800 tracking-tight">
+        <h1 className="text-3xl font-black text-text-main tracking-tight">
           {t('orders.trackingTitle')}
         </h1>
-        <div className="inline-flex items-center gap-1.5 px-3 py-1 bg-amber-50 rounded-full border border-amber-100">
+        <div className="inline-flex items-center gap-1.5 px-3 py-1 bg-brand-light rounded-full border border-brand-primary/10">
           <span className="h-2 w-2 rounded-full bg-emerald-500 animate-ping" />
-          <span className="text-[10px] font-black uppercase text-amber-600 tracking-wider">
+          <span className="text-[10px] font-black uppercase text-brand-text tracking-wider">
             {t('orders.orderId')}: #{orderId.substring(0, 8)}
           </span>
         </div>
       </div>
 
       {/* Live Track Card */}
-      <div className="bg-white rounded-3xl border border-slate-100 shadow-xl p-8 space-y-10">
+      <div className="bg-bg-card rounded-3xl border border-border-card shadow-xl p-8 space-y-10">
         
         {isCancelled ? (
           <div className="flex flex-col items-center justify-center py-8 text-center space-y-4">
-            <div className="p-4 bg-red-50 text-red-500 rounded-full border border-red-100">
+            <div className="p-4 bg-rose-500/10 text-rose-500 rounded-full border border-rose-500/10">
               <AlertTriangle size={36} />
             </div>
-            <h3 className="font-extrabold text-lg text-slate-800">
+            <h3 className="font-extrabold text-lg text-text-main">
               {t('status.Cancelled')}
             </h3>
-            <p className="text-xs text-slate-400 font-semibold max-w-[240px]">
+            <p className="text-xs text-text-muted font-semibold max-w-[240px]">
               This order has been cancelled by the administration.
             </p>
           </div>
@@ -98,18 +110,18 @@ export function OrderTracking({ orderId }) {
           /* Timeline Steps */
           <div className="relative">
             {/* Progress bar line - Horizontal for desktop, Vertical for mobile */}
-            <div className="absolute top-6 start-6 end-6 h-1 bg-slate-100 -z-10 hidden sm:block">
+            <div className="absolute top-6 start-6 end-6 h-1 bg-bg-app -z-10 hidden sm:block">
               <div
-                className="h-full bg-gradient-to-r from-amber-500 to-orange-500 transition-all duration-700"
+                className="h-full bg-gradient-to-r from-brand-gradient-from to-brand-gradient-to transition-all duration-700"
                 style={{
                   width: `${(currentStepIndex / (steps.length - 1)) * 100}%`
                 }}
               />
             </div>
 
-            <div className="absolute top-6 bottom-6 start-6 w-1 bg-slate-100 -z-10 sm:hidden">
+            <div className="absolute top-6 bottom-6 start-6 w-1 bg-bg-app -z-10 sm:hidden">
               <div
-                className="w-full bg-gradient-to-b from-amber-500 to-orange-500 transition-all duration-700"
+                className="w-full bg-gradient-to-b from-brand-gradient-from to-brand-gradient-to transition-all duration-700"
                 style={{
                   height: `${(currentStepIndex / (steps.length - 1)) * 100}%`
                 }}
@@ -130,15 +142,15 @@ export function OrderTracking({ orderId }) {
                     <div
                       className={`relative h-12 w-12 rounded-full flex items-center justify-center flex-shrink-0 border-2 transition-all duration-300 ${
                         isCompleted
-                          ? 'bg-gradient-to-r from-amber-500 to-orange-500 text-white border-transparent shadow-lg shadow-amber-500/10'
+                          ? 'bg-gradient-to-r from-brand-gradient-from to-brand-gradient-to text-white border-transparent shadow-lg shadow-brand-primary/10'
                           : isActive
-                          ? 'bg-white text-amber-500 border-amber-500 scale-110 shadow-lg shadow-amber-500/15'
-                          : 'bg-white text-slate-300 border-slate-100'
+                          ? 'bg-bg-card text-brand-primary border-brand-primary scale-110 shadow-lg shadow-brand-primary/15'
+                          : 'bg-bg-card text-text-muted border-border-card'
                       }`}
                     >
                       <StepIcon size={20} />
                       {isActive && (
-                        <span className="absolute -inset-1.5 border border-amber-500/30 rounded-full animate-ping -z-10" />
+                        <span className="absolute -inset-1.5 border border-brand-primary/30 rounded-full animate-ping -z-10" />
                       )}
                     </div>
 
@@ -147,10 +159,10 @@ export function OrderTracking({ orderId }) {
                       <h4
                         className={`text-sm font-extrabold tracking-tight transition-colors ${
                           isActive
-                            ? 'text-amber-500'
+                            ? 'text-brand-primary'
                             : isCompleted
-                            ? 'text-slate-800'
-                            : 'text-slate-400'
+                            ? 'text-text-main'
+                            : 'text-text-muted'
                         }`}
                       >
                         {step.label}
@@ -165,33 +177,33 @@ export function OrderTracking({ orderId }) {
 
         {/* Address and Items summary */}
         {orderDetails && (
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 pt-8 border-t border-slate-100">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 pt-8 border-t border-border-card">
             {/* Delivery details */}
             <div className="space-y-4">
-              <h3 className="font-extrabold text-sm text-slate-800 tracking-tight">
+              <h3 className="font-extrabold text-sm text-text-main tracking-tight">
                 {t('orders.address')}
               </h3>
-              <div className="text-xs font-semibold text-slate-500 leading-relaxed bg-slate-50/50 p-4 border border-slate-100 rounded-2xl space-y-2.5">
+              <div className="text-xs font-semibold text-text-muted leading-relaxed bg-bg-app p-4 border border-border-card rounded-2xl space-y-2.5">
                 <div>
-                  <span className="block text-[10px] font-black uppercase text-slate-400 mb-0.5">{t('orders.address')}</span>
-                  <span className="text-slate-700">{orderDetails.deliveryAddress}</span>
+                  <span className="block text-[10px] font-black uppercase text-text-muted mb-0.5">{t('orders.address')}</span>
+                  <span className="text-text-main">{orderDetails.deliveryAddress}</span>
                 </div>
                 {orderDetails.addressDetails && (
                   <div>
-                    <span className="block text-[10px] font-black uppercase text-slate-400 mb-0.5">{t('orders.landmark')}</span>
-                    <span className="text-slate-700">{orderDetails.addressDetails}</span>
+                    <span className="block text-[10px] font-black uppercase text-text-muted mb-0.5">{t('orders.landmark')}</span>
+                    <span className="text-text-main">{orderDetails.addressDetails}</span>
                   </div>
                 )}
                 {orderDetails.phoneNumber && (
                   <div>
-                    <span className="block text-[10px] font-black uppercase text-slate-400 mb-0.5">{t('orders.phone')}</span>
-                    <span className="text-slate-700">{orderDetails.phoneNumber}</span>
+                    <span className="block text-[10px] font-black uppercase text-text-muted mb-0.5">{t('orders.phone')}</span>
+                    <span className="text-text-main">{orderDetails.phoneNumber}</span>
                   </div>
                 )}
                 {orderDetails.notes && (
-                  <div className="border-t border-slate-200/60 pt-2">
-                    <span className="block text-[10px] font-black uppercase text-amber-600 mb-0.5">{t('orders.notes')}</span>
-                    <span className="text-slate-600 italic bg-amber-50/20 p-2 rounded-lg border border-amber-100/50 block">{orderDetails.notes}</span>
+                  <div className="border-t border-border-card pt-2">
+                    <span className="block text-[10px] font-black uppercase text-brand-text mb-0.5">{t('orders.notes')}</span>
+                    <span className="text-text-main italic bg-brand-light/30 p-2 rounded-lg border border-brand-primary/10 block">{orderDetails.notes}</span>
                   </div>
                 )}
               </div>
@@ -199,24 +211,24 @@ export function OrderTracking({ orderId }) {
 
             {/* Order contents */}
             <div className="space-y-4">
-              <h3 className="font-extrabold text-sm text-slate-800 tracking-tight">
+              <h3 className="font-extrabold text-sm text-text-main tracking-tight">
                 {t('orders.summary')}
               </h3>
-              <div className="bg-slate-50/50 p-4 border border-slate-100 rounded-2xl space-y-3">
+              <div className="bg-bg-app p-4 border border-border-card rounded-2xl space-y-3">
                 {orderDetails.items.map((item, idx) => {
                   const prodName = item.productName?.[currentLang] || item.productName?.['en'] || '';
                   return (
                     <div key={idx} className="flex justify-between items-center text-xs font-bold">
-                      <span className="text-slate-600">
-                        {prodName} <span className="text-slate-400">x{item.quantity}</span>
+                      <span className="text-text-main">
+                        {prodName} <span className="text-text-muted">x{item.quantity}</span>
                       </span>
-                      <span className="text-slate-800">${(item.unitPrice * item.quantity).toFixed(2)}</span>
+                      <span className="text-text-main">${(item.unitPrice * item.quantity).toFixed(2)}</span>
                     </div>
                   );
                 })}
-                <div className="pt-2.5 border-t border-slate-200/50 flex justify-between items-center text-sm font-black">
-                  <span className="text-slate-800">Total</span>
-                  <span className="text-amber-600">${orderDetails.totalAmount.toFixed(2)}</span>
+                <div className="pt-2.5 border-t border-border-card flex justify-between items-center text-sm font-black">
+                  <span className="text-text-main">Total</span>
+                  <span className="text-brand-primary">${orderDetails.totalAmount.toFixed(2)}</span>
                 </div>
               </div>
             </div>

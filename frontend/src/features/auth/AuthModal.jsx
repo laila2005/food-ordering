@@ -48,27 +48,27 @@ export function AuthModal({ isOpen, onClose }) {
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm transition-all duration-300">
-      <div className="relative w-full max-w-md bg-white rounded-3xl shadow-2xl overflow-hidden border border-slate-100 flex flex-col p-6 animate-in fade-in zoom-in-95 duration-200">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/60 backdrop-blur-sm transition-all duration-300">
+      <div className="relative w-full max-w-md bg-bg-card rounded-3xl shadow-2xl overflow-hidden border border-border-card flex flex-col p-6 animate-in fade-in zoom-in-95 duration-200 transition-colors duration-300">
         
         {/* Close Button */}
         <button
           onClick={onClose}
-          className="absolute top-4 end-4 p-1.5 rounded-full text-slate-400 hover:text-slate-600 hover:bg-slate-100 transition-colors"
+          className="absolute top-4 end-4 p-1.5 rounded-full text-text-muted hover:text-text-main hover:bg-bg-app transition-colors cursor-pointer"
         >
           <X size={20} />
         </button>
 
         {/* Modal Title */}
         <div className="text-center mt-2 mb-6">
-          <h2 className="text-2xl font-black text-slate-800 tracking-tight">
+          <h2 className="text-2xl font-black text-text-main tracking-tight">
             {isRegister ? t('auth.registerTitle') : t('auth.loginTitle')}
           </h2>
         </div>
 
         {/* Error Alert */}
         {error && (
-          <div className="mb-4 p-3.5 bg-red-50 text-red-600 rounded-2xl text-xs font-bold border border-red-100 animate-shake">
+          <div className="mb-4 p-3.5 bg-rose-500/10 text-rose-500 rounded-2xl text-xs font-bold border border-rose-500/10 animate-shake">
             {error}
           </div>
         )}
@@ -77,11 +77,11 @@ export function AuthModal({ isOpen, onClose }) {
         <form onSubmit={handleSubmit} className="space-y-4">
           {isRegister && (
             <div>
-              <label className="block text-xs font-bold text-slate-600 mb-1.5 uppercase tracking-wide">
+              <label className="block text-xs font-bold text-text-muted mb-1.5 uppercase tracking-wide">
                 {t('auth.fullName')}
               </label>
               <div className="relative">
-                <div className="absolute inset-y-0 start-0 flex items-center ps-3 text-slate-400 pointer-events-none">
+                <div className="absolute inset-y-0 start-0 flex items-center ps-3 text-text-muted pointer-events-none">
                   <User size={18} />
                 </div>
                 <input
@@ -89,7 +89,7 @@ export function AuthModal({ isOpen, onClose }) {
                   required
                   value={fullName}
                   onChange={(e) => setFullName(e.target.value)}
-                  className="w-full ps-10 pe-4 py-2.5 bg-slate-50 border border-slate-200 rounded-2xl text-sm text-slate-800 font-semibold focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 transition-colors"
+                  className="w-full ps-10 pe-4 py-2.5 bg-bg-app border border-border-card rounded-2xl text-sm text-text-main font-semibold focus:outline-none focus:ring-2 focus:ring-brand-primary/20 focus:border-brand-primary transition-colors"
                   placeholder="John Doe"
                 />
               </div>
@@ -97,11 +97,11 @@ export function AuthModal({ isOpen, onClose }) {
           )}
 
           <div>
-            <label className="block text-xs font-bold text-slate-600 mb-1.5 uppercase tracking-wide">
+            <label className="block text-xs font-bold text-text-muted mb-1.5 uppercase tracking-wide">
               {t('auth.email')}
             </label>
             <div className="relative">
-              <div className="absolute inset-y-0 start-0 flex items-center ps-3 text-slate-400 pointer-events-none">
+              <div className="absolute inset-y-0 start-0 flex items-center ps-3 text-text-muted pointer-events-none">
                 <Mail size={18} />
               </div>
               <input
@@ -109,18 +109,18 @@ export function AuthModal({ isOpen, onClose }) {
                 required
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="w-full ps-10 pe-4 py-2.5 bg-slate-50 border border-slate-200 rounded-2xl text-sm text-slate-800 font-semibold focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 transition-colors"
+                className="w-full ps-10 pe-4 py-2.5 bg-bg-app border border-border-card rounded-2xl text-sm text-text-main font-semibold focus:outline-none focus:ring-2 focus:ring-brand-primary/20 focus:border-brand-primary transition-colors"
                 placeholder="email@example.com"
               />
             </div>
           </div>
 
           <div>
-            <label className="block text-xs font-bold text-slate-600 mb-1.5 uppercase tracking-wide">
+            <label className="block text-xs font-bold text-text-muted mb-1.5 uppercase tracking-wide">
               {t('auth.password')}
             </label>
             <div className="relative">
-              <div className="absolute inset-y-0 start-0 flex items-center ps-3 text-slate-400 pointer-events-none">
+              <div className="absolute inset-y-0 start-0 flex items-center ps-3 text-text-muted pointer-events-none">
                 <Lock size={18} />
               </div>
               <input
@@ -128,13 +128,13 @@ export function AuthModal({ isOpen, onClose }) {
                 required
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="w-full ps-10 pe-10 py-2.5 bg-slate-50 border border-slate-200 rounded-2xl text-sm text-slate-800 font-semibold focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 transition-colors"
+                className="w-full ps-10 pe-10 py-2.5 bg-bg-app border border-border-card rounded-2xl text-sm text-text-main font-semibold focus:outline-none focus:ring-2 focus:ring-brand-primary/20 focus:border-brand-primary transition-colors"
                 placeholder="••••••••"
               />
               <button
                 type="button"
                 onClick={() => setShowPassword(!showPassword)}
-                className="absolute inset-y-0 end-0 flex items-center pe-3 text-slate-400 hover:text-slate-600"
+                className="absolute inset-y-0 end-0 flex items-center pe-3 text-text-muted hover:text-text-main cursor-pointer"
               >
                 {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
               </button>
@@ -145,7 +145,7 @@ export function AuthModal({ isOpen, onClose }) {
           <button
             type="submit"
             disabled={loading}
-            className="w-full py-3 mt-2 bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-white font-extrabold text-sm rounded-2xl shadow-lg shadow-amber-500/10 transition-all duration-300 disabled:opacity-50 active:scale-[0.98]"
+            className="w-full py-3 mt-2 bg-gradient-to-r from-brand-gradient-from to-brand-gradient-to hover:opacity-90 text-white font-extrabold text-sm rounded-2xl shadow-lg shadow-brand-primary/10 transition-all duration-300 disabled:opacity-50 active:scale-[0.98] cursor-pointer"
           >
             {loading ? (
               <span className="flex items-center justify-center gap-2">
@@ -167,7 +167,7 @@ export function AuthModal({ isOpen, onClose }) {
               setIsRegister(!isRegister);
               setError('');
             }}
-            className="font-bold text-amber-500 hover:text-amber-600 hover:underline transition-all"
+            className="font-bold text-brand-primary hover:opacity-85 hover:underline transition-all cursor-pointer"
           >
             {isRegister ? t('auth.hasAccount') : t('auth.noAccount')}
           </button>

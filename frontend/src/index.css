@@ -1,6 +1,58 @@
 @import "tailwindcss";
 @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600;700;800&display=swap');
 
+@theme {
+  --color-brand-primary: var(--accent-color);
+  --color-brand-gradient-from: var(--accent-gradient-from);
+  --color-brand-gradient-to: var(--accent-gradient-to);
+  --color-brand-light: var(--accent-light);
+  --color-brand-text: var(--accent-text);
+  --color-bg-app: var(--bg-app);
+  --color-bg-card: var(--bg-card);
+  --color-border-card: var(--border-color);
+  --color-text-main: var(--text-main);
+  --color-text-muted: var(--text-muted);
+}
+
+:root {
+  --bg-app: #f8fafc;
+  --bg-card: #ffffff;
+  --border-color: #f1f5f9;
+  --text-main: #1e293b;
+  --text-muted: #94a3b8;
+  --accent-color: #f59e0b; /* amber-500 */
+  --accent-gradient-from: #f59e0b;
+  --accent-gradient-to: #ea580c;
+  --accent-light: #fef3c7; /* amber-100 */
+  --accent-text: #b45309; /* amber-700 */
+}
+
+html[theme="forest"] {
+  --bg-app: #f4f6f4;
+  --bg-card: #ffffff;
+  --border-color: #e2e8e2;
+  --text-main: #2d372d;
+  --text-muted: #7a8a7a;
+  --accent-color: #10b981; /* emerald-500 */
+  --accent-gradient-from: #10b981;
+  --accent-gradient-to: #059669;
+  --accent-light: #d1fae5; /* emerald-100 */
+  --accent-text: #047857; /* emerald-700 */
+}
+
+html[theme="velvet"] {
+  --bg-app: #090d16;
+  --bg-card: #111827;
+  --border-color: #1f2937;
+  --text-main: #f9fafb;
+  --text-muted: #6b7280;
+  --accent-color: #f97316; /* orange-500 */
+  --accent-gradient-from: #f97316;
+  --accent-gradient-to: #ea580c;
+  --accent-light: #1e293b; /* slate-800 */
+  --accent-text: #fdba74; /* orange-300 */
+}
+
 @layer base {
   html {
     font-family: 'Inter', 'Cairo', sans-serif;
@@ -8,10 +60,34 @@
   
   html[dir="rtl"] {
     font-family: 'Cairo', 'Inter', sans-serif;
+    font-size: 108%; /* Scale rem sizing slightly to make Arabic Cairo font highly legible */
   }
-}
 
-body {
-  margin: 0;
-  background-color: #f8fafc;
+  body {
+    margin: 0;
+    background-color: var(--bg-app);
+    color: var(--text-main);
+    transition: background-color 300ms, color 300ms, border-color 300ms;
+  }
+
+  /* Custom animated shimmer for premium glass loading state */
+  @keyframes shimmer {
+    0% {
+      background-position: -200% 0;
+    }
+    100% {
+      background-position: 200% 0;
+    }
+  }
+
+  .shimmer-bg {
+    background: linear-gradient(
+      90deg,
+      var(--bg-app) 25%,
+      var(--border-color) 37%,
+      var(--bg-app) 63%
+    );
+    background-size: 200% 100%;
+    animation: shimmer 1.5s infinite linear;
+  }
 }

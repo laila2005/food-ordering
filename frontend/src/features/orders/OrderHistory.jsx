@@ -22,6 +22,10 @@ export function OrderHistory({ onTrackOrder }) {
         });
 
         if (!response.ok) {
+          if (response.status === 401) {
+            useAuthStore.getState().logout();
+            throw new Error('Your session has expired. Please log in again.');
+          }
           throw new Error('Failed to retrieve order history.');
         }
 
@@ -44,10 +48,10 @@ export function OrderHistory({ onTrackOrder }) {
       
       {/* Header */}
       <div className="flex items-center gap-3">
-        <div className="p-2.5 bg-amber-500 text-white rounded-2xl shadow-lg shadow-amber-500/10">
+        <div className="p-2.5 bg-brand-primary text-white rounded-2xl shadow-lg shadow-brand-primary/10">
           <ShoppingBag size={24} />
         </div>
-        <h1 className="text-2xl font-black text-slate-800 tracking-tight">
+        <h1 className="text-2xl font-black text-text-main tracking-tight">
           {t('orders.historyTitle')}
         </h1>
       </div>
@@ -65,11 +69,11 @@ export function OrderHistory({ onTrackOrder }) {
           {error}
         </div>
       ) : orders.length === 0 ? (
-        <div className="bg-white rounded-3xl border border-slate-100 p-12 text-center flex flex-col items-center justify-center space-y-4">
-          <div className="p-4 bg-slate-50 text-slate-400 rounded-full">
+        <div className="bg-bg-card rounded-3xl border border-border-card p-12 text-center flex flex-col items-center justify-center space-y-4">
+          <div className="p-4 bg-bg-app text-text-muted rounded-full">
             <ShoppingBag size={32} />
           </div>
-          <p className="text-sm font-semibold text-slate-400">
+          <p className="text-sm font-semibold text-text-muted">
             {t('orders.noOrders')}
           </p>
         </div>
@@ -88,26 +92,26 @@ export function OrderHistory({ onTrackOrder }) {
             return (
               <div
                 key={order.id}
-                className="bg-white rounded-3xl border border-slate-100 shadow-sm p-6 hover:shadow-md transition-shadow flex flex-col md:flex-row md:items-center justify-between gap-6"
+                className="bg-bg-card rounded-3xl border border-border-card shadow-sm p-6 hover:shadow-md transition-colors duration-300 flex flex-col md:flex-row md:items-center justify-between gap-6"
               >
                 {/* Meta details */}
                 <div className="space-y-2.5">
                   <div className="flex items-center gap-3">
-                    <span className="text-xs font-black text-amber-500 uppercase tracking-wide">
+                    <span className="text-xs font-black text-brand-primary uppercase tracking-wide">
                       #{order.id.substring(0, 8)}
                     </span>
                     <span className={`text-[10px] font-black uppercase px-2.5 py-1 rounded-full ${
                       order.status === 'Delivered'
-                        ? 'bg-green-50 text-green-600'
+                        ? 'bg-emerald-500/10 text-emerald-500'
                         : order.status === 'Cancelled'
-                        ? 'bg-red-50 text-red-600'
-                        : 'bg-amber-50 text-amber-600 animate-pulse'
+                        ? 'bg-rose-500/10 text-rose-500'
+                        : 'bg-brand-light text-brand-text animate-pulse border border-brand-primary/10'
                     }`}>
                       {t(`status.${order.status}`)}
                     </span>
                   </div>
 
-                  <div className="flex flex-wrap items-center gap-4 text-xs font-semibold text-slate-400">
+                  <div className="flex flex-wrap items-center gap-4 text-xs font-semibold text-text-muted">
                     <span className="flex items-center gap-1">
                       <Calendar size={13} />
                       <span>{date}</span>
@@ -116,7 +120,7 @@ export function OrderHistory({ onTrackOrder }) {
                       <Clock size={13} />
                       <span>{itemsCount} {t('orders.itemsCount')}</span>
                     </span>
-                    <span className="flex items-center gap-1 font-bold text-slate-700">
+                    <span className="flex items-center gap-1 font-bold text-text-main">
                       <DollarSign size={13} />
                       <span>${order.totalAmount.toFixed(2)}</span>
                     </span>
@@ -127,7 +131,7 @@ export function OrderHistory({ onTrackOrder }) {
                 <div className="flex items-center">
                   <button
                     onClick={() => onTrackOrder(order.id)}
-                    className="flex items-center gap-2 px-5 py-3 bg-slate-50 hover:bg-amber-500 hover:text-white text-slate-700 font-extrabold text-xs rounded-2xl transition-all shadow-xs border border-slate-100 hover:border-amber-500 cursor-pointer"
+                    className="flex items-center gap-2 px-5 py-3 bg-bg-app hover:bg-brand-primary hover:text-white text-text-main font-extrabold text-xs rounded-2xl transition-all shadow-xs border border-border-card hover:border-brand-primary cursor-pointer"
                   >
                     <Eye size={14} />
                     <span>{t('orders.trackBtn')}</span>

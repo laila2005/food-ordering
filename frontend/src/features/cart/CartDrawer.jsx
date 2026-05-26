@@ -9,13 +9,29 @@ export function CartDrawer({ isOpen, onClose, onOpenAuth, onCheckoutSuccess }) {
   const { user, token } = useAuthStore();
   const { items, addItem, removeItem, clearCart, getTotalAmount } = useCartStore();
   
-  const [address, setAddress] = useState('');
-  const [phone, setPhone] = useState('');
-  const [landmark, setLandmark] = useState('');
-  const [notes, setNotes] = useState('');
+  const [address, setAddress] = useState(() => localStorage.getItem('checkout_address') || '');
+  const [phone, setPhone] = useState(() => localStorage.getItem('checkout_phone') || '');
+  const [landmark, setLandmark] = useState(() => localStorage.getItem('checkout_landmark') || '');
+  const [notes, setNotes] = useState(() => localStorage.getItem('checkout_notes') || '');
   const [paymentMethod, setPaymentMethod] = useState('CashOnDelivery');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+
+  React.useEffect(() => {
+    localStorage.setItem('checkout_address', address);
+  }, [address]);
+
+  React.useEffect(() => {
+    localStorage.setItem('checkout_phone', phone);
+  }, [phone]);
+
+  React.useEffect(() => {
+    localStorage.setItem('checkout_landmark', landmark);
+  }, [landmark]);
+
+  React.useEffect(() => {
+    localStorage.setItem('checkout_notes', notes);
+  }, [notes]);
 
   if (!isOpen) return null;
 
@@ -72,14 +88,15 @@ export function CartDrawer({ isOpen, onClose, onOpenAuth, onCheckoutSuccess }) {
       }
 
       if (!response.ok) {
+        if (response.status === 401) {
+          useAuthStore.getState().logout();
+          throw new Error('Your session has expired. Please log out and log back in.');
+        }
         throw new Error(data?.message || 'Error creating order.');
       }
 
       clearCart();
-      setAddress('');
-      setPhone('');
-      setLandmark('');
-      setNotes('');
+      setNotes(''); // Clear only order-specific notes
       onCheckoutSuccess(data.orderId);
       onClose();
     } catch (err) {
@@ -93,21 +110,21 @@ export function CartDrawer({ isOpen, onClose, onOpenAuth, onCheckoutSuccess }) {
     <div className="fixed inset-0 z-50 overflow-hidden">
       {/* Overlay backdrop */}
       <div
-        className="absolute inset-0 bg-slate-900/50 backdrop-blur-xs transition-opacity duration-300"
+        className="absolute inset-0 bg-slate-950/55 backdrop-blur-xs transition-opacity duration-300"
         onClick={onClose}
       />
 
       <div className="absolute inset-y-0 end-0 max-w-full flex">
-        <div className="w-screen max-w-md bg-white shadow-2xl flex flex-col h-full animate-in slide-in-from-right duration-300">
+        <div className="w-screen max-w-md bg-bg-card border-s border-border-card shadow-2xl flex flex-col h-full animate-in slide-in-from-right duration-300 transition-colors duration-300">
           
           {/* Header */}
-          <div className="px-6 py-5 border-b border-slate-100 flex justify-between items-center bg-slate-50/50">
-            <h2 className="text-lg font-black text-slate-800 tracking-tight flex items-center gap-2">
+          <div className="px-6 py-5 border-b border-border-card flex justify-between items-center bg-bg-app transition-colors duration-300">
+            <h2 className="text-lg font-black text-text-main tracking-tight flex items-center gap-2">
               <span>{t('cart.title')}</span>
             </h2>
             <button
               onClick={onClose}
-              className="p-1.5 rounded-full text-slate-400 hover:text-slate-600 hover:bg-slate-100 transition-colors"
+              className="p-1.5 rounded-full text-text-muted hover:text-text-main hover:bg-bg-app transition-colors cursor-pointer"
             >
               <X size={20} />
             </button>
@@ -116,17 +133,17 @@ export function CartDrawer({ isOpen, onClose, onOpenAuth, onCheckoutSuccess }) {
           {/* Body List */}
           <div className="flex-1 overflow-y-auto px-6 py-4 space-y-4">
             {error && (
-              <div className="p-3 bg-red-50 text-red-600 rounded-2xl text-xs font-bold border border-red-100">
+              <div className="p-3 bg-rose-500/10 text-rose-500 rounded-2xl text-xs font-bold border border-rose-500/10">
                 {error}
               </div>
             )}
 
             {items.length === 0 ? (
               <div className="flex flex-col items-center justify-center py-20 text-center space-y-4">
-                <div className="p-4 bg-amber-50 text-amber-500 rounded-full">
+                <div className="p-4 bg-brand-light text-brand-primary rounded-full">
                   <Trash2 size={36} />
                 </div>
-                <p className="text-sm font-semibold text-slate-400 max-w-[200px]">
+                <p className="text-sm font-semibold text-text-muted max-w-[200px]">
                   {t('cart.empty')}
                 </p>
               </div>
@@ -138,34 +155,34 @@ export function CartDrawer({ isOpen, onClose, onOpenAuth, onCheckoutSuccess }) {
                   return (
                     <div
                       key={item.product.id}
-                      className="flex items-center gap-4 py-3 border-b border-slate-50"
+                      className="flex items-center gap-4 py-3 border-b border-border-card"
                     >
                       <img
                         src={item.product.imageUrl}
                         alt={prodName}
-                        className="w-16 h-16 rounded-2xl object-cover bg-slate-100 flex-shrink-0"
+                        className="w-16 h-16 rounded-2xl object-cover bg-bg-app flex-shrink-0"
                       />
                       <div className="flex-1 min-w-0">
-                        <h4 className="font-extrabold text-sm text-slate-800 truncate">
+                        <h4 className="font-extrabold text-sm text-text-main truncate">
                           {prodName}
                         </h4>
-                        <span className="text-xs font-bold text-slate-400 block mt-0.5">
+                        <span className="text-xs font-bold text-text-muted block mt-0.5">
                           ${(item.product.price || 0).toFixed(2)}
                         </span>
                       </div>
 
                       {/* Quantity Controls */}
-                      <div className="flex items-center gap-2.5 bg-slate-50 border border-slate-200/50 px-2 py-1 rounded-xl">
+                      <div className="flex items-center gap-2.5 bg-bg-app border border-border-card px-2 py-1 rounded-xl">
                         <button
                           onClick={() => removeItem(item.product.id)}
-                          className="p-0.5 rounded text-slate-500 hover:bg-slate-200 active:scale-90"
+                          className="p-0.5 rounded text-text-muted hover:bg-border-card active:scale-90 cursor-pointer"
                         >
                           <Minus size={12} />
                         </button>
-                        <span className="text-xs font-black text-slate-800">{item.quantity}</span>
+                        <span className="text-xs font-black text-text-main">{item.quantity}</span>
                         <button
                           onClick={() => addItem(item.product)}
-                          className="p-0.5 rounded text-slate-500 hover:bg-slate-200 active:scale-90"
+                          className="p-0.5 rounded text-text-muted hover:bg-border-card active:scale-90 cursor-pointer"
                         >
                           <Plus size={12} />
                         </button>
@@ -178,7 +195,7 @@ export function CartDrawer({ isOpen, onClose, onOpenAuth, onCheckoutSuccess }) {
                 <form onSubmit={handleCheckout} className="space-y-4 pt-4">
                   {/* Delivery Address */}
                   <div>
-                    <label className="block text-xs font-bold text-slate-600 mb-1.5 uppercase tracking-wide flex items-center gap-1">
+                    <label className="block text-xs font-bold text-text-muted mb-1.5 uppercase tracking-wide flex items-center gap-1">
                       <MapPin size={12} />
                       <span>{t('cart.address')}</span>
                     </label>
@@ -187,14 +204,14 @@ export function CartDrawer({ isOpen, onClose, onOpenAuth, onCheckoutSuccess }) {
                       rows="2"
                       value={address}
                       onChange={(e) => setAddress(e.target.value)}
-                      className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-2xl text-xs text-slate-800 font-semibold focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 transition-colors"
+                      className="w-full px-3 py-2 bg-bg-app border border-border-card rounded-2xl text-xs text-text-main font-semibold focus:outline-none focus:bg-bg-card focus:ring-2 focus:ring-brand-primary/20 focus:border-brand-primary transition-colors"
                       placeholder="123 Main St, Apartment 4B"
                     />
                   </div>
 
                   {/* Phone Number */}
                   <div>
-                    <label className="block text-xs font-bold text-slate-600 mb-1.5 uppercase tracking-wide flex items-center gap-1">
+                    <label className="block text-xs font-bold text-text-muted mb-1.5 uppercase tracking-wide flex items-center gap-1">
                       <Phone size={12} />
                       <span>{t('cart.phone')}</span>
                     </label>
@@ -203,14 +220,14 @@ export function CartDrawer({ isOpen, onClose, onOpenAuth, onCheckoutSuccess }) {
                       required
                       value={phone}
                       onChange={(e) => setPhone(e.target.value)}
-                      className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-2xl text-xs text-slate-800 font-semibold focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 transition-colors"
+                      className="w-full px-3 py-2 bg-bg-app border border-border-card rounded-2xl text-xs text-text-main font-semibold focus:outline-none focus:bg-bg-card focus:ring-2 focus:ring-brand-primary/20 focus:border-brand-primary transition-colors"
                       placeholder="+1 (555) 123-4567"
                     />
                   </div>
 
                   {/* Landmark / Address Details */}
                   <div>
-                    <label className="block text-xs font-bold text-slate-600 mb-1.5 uppercase tracking-wide flex items-center gap-1">
+                    <label className="block text-xs font-bold text-text-muted mb-1.5 uppercase tracking-wide flex items-center gap-1">
                       <Info size={12} />
                       <span>{t('cart.landmark')}</span>
                     </label>
@@ -218,14 +235,14 @@ export function CartDrawer({ isOpen, onClose, onOpenAuth, onCheckoutSuccess }) {
                       type="text"
                       value={landmark}
                       onChange={(e) => setLandmark(e.target.value)}
-                      className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-2xl text-xs text-slate-800 font-semibold focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 transition-colors"
+                      className="w-full px-3 py-2 bg-bg-app border border-border-card rounded-2xl text-xs text-text-main font-semibold focus:outline-none focus:bg-bg-card focus:ring-2 focus:ring-brand-primary/20 focus:border-brand-primary transition-colors"
                       placeholder="e.g. Near Grand Mosque, Floor 3, Apt 12"
                     />
                   </div>
 
                   {/* Notes / Special Instructions */}
                   <div>
-                    <label className="block text-xs font-bold text-slate-600 mb-1.5 uppercase tracking-wide flex items-center gap-1">
+                    <label className="block text-xs font-bold text-text-muted mb-1.5 uppercase tracking-wide flex items-center gap-1">
                       <FileText size={12} />
                       <span>{t('cart.notes')}</span>
                     </label>
@@ -233,14 +250,14 @@ export function CartDrawer({ isOpen, onClose, onOpenAuth, onCheckoutSuccess }) {
                       rows="2"
                       value={notes}
                       onChange={(e) => setNotes(e.target.value)}
-                      className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-2xl text-xs text-slate-800 font-semibold focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 transition-colors"
+                      className="w-full px-3 py-2 bg-bg-app border border-border-card rounded-2xl text-xs text-text-main font-semibold focus:outline-none focus:bg-bg-card focus:ring-2 focus:ring-brand-primary/20 focus:border-brand-primary transition-colors"
                       placeholder="e.g. Leave order at front desk, ring bell..."
                     />
                   </div>
 
                   {/* Payment Selection */}
                   <div>
-                    <label className="block text-xs font-bold text-slate-600 mb-2 uppercase tracking-wide">
+                    <label className="block text-xs font-bold text-text-muted mb-2 uppercase tracking-wide">
                       {t('cart.paymentMethod')}
                     </label>
                     <div className="grid grid-cols-2 gap-3">
@@ -248,8 +265,8 @@ export function CartDrawer({ isOpen, onClose, onOpenAuth, onCheckoutSuccess }) {
                       <label
                         className={`flex items-center justify-center gap-2 p-3 border rounded-2xl cursor-pointer transition-all ${
                           paymentMethod === 'CashOnDelivery'
-                            ? 'border-amber-500 bg-amber-50/50 text-amber-600 font-bold'
-                            : 'border-slate-200 hover:bg-slate-50 text-slate-500'
+                            ? 'border-brand-primary bg-brand-light text-brand-text font-bold'
+                            : 'border-border-card hover:bg-bg-app text-text-muted'
                         }`}
                       >
                         <input
@@ -268,8 +285,8 @@ export function CartDrawer({ isOpen, onClose, onOpenAuth, onCheckoutSuccess }) {
                       <label
                         className={`flex items-center justify-center gap-2 p-3 border rounded-2xl cursor-pointer transition-all ${
                           paymentMethod === 'Stripe'
-                            ? 'border-amber-500 bg-amber-50/50 text-amber-600 font-bold'
-                            : 'border-slate-200 hover:bg-slate-50 text-slate-500'
+                            ? 'border-brand-primary bg-brand-light text-brand-text font-bold'
+                            : 'border-border-card hover:bg-bg-app text-text-muted'
                         }`}
                       >
                         <input
@@ -292,12 +309,12 @@ export function CartDrawer({ isOpen, onClose, onOpenAuth, onCheckoutSuccess }) {
 
           {/* Footer Checkouts */}
           {items.length > 0 && (
-            <div className="px-6 py-5 border-t border-slate-100 bg-slate-50/50 space-y-4">
+            <div className="px-6 py-5 border-t border-border-card bg-bg-app space-y-4 transition-colors duration-300">
               <div className="flex justify-between items-center">
-                <span className="text-xs font-bold text-slate-400 uppercase tracking-wide">
+                <span className="text-xs font-bold text-text-muted uppercase tracking-wide">
                   {t('cart.total')}
                 </span>
-                <span className="text-2xl font-black text-slate-800">
+                <span className="text-2xl font-black text-text-main">
                   ${getTotalAmount().toFixed(2)}
                 </span>
               </div>
@@ -305,7 +322,7 @@ export function CartDrawer({ isOpen, onClose, onOpenAuth, onCheckoutSuccess }) {
               <button
                 onClick={handleCheckout}
                 disabled={loading}
-                className="w-full py-3.5 bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-white font-extrabold text-sm rounded-2xl shadow-lg shadow-amber-500/10 active:scale-[0.98] transition-all disabled:opacity-50"
+                className="w-full py-3.5 bg-gradient-to-r from-brand-gradient-from to-brand-gradient-to hover:opacity-90 text-white font-extrabold text-sm rounded-2xl shadow-lg shadow-brand-primary/10 active:scale-[0.98] transition-all disabled:opacity-50 cursor-pointer"
               >
                 {loading ? (
                   <span className="flex items-center justify-center gap-2">

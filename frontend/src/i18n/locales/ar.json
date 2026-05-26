@@ -7,7 +7,8 @@
     "register": "إنشاء حساب",
     "dashboard": "لوحة التحكم",
     "logout": "خروج",
-    "myOrders": "طلباتي"
+    "myOrders": "طلباتي",
+    "trackOrder": "تتبع الطلب"
   },
   "auth": {
     "loginTitle": "مرحباً بعودتك",
@@ -25,6 +26,7 @@
     "title": "قائمتنا اللذيذة",
     "subtitle": "مكونات طازجة، توصيل سريع، طعم رائع",
     "all": "جميع الأقسام",
+    "favorites": "المفضلة (❤️)",
     "addToCart": "إضافة إلى السلة",
     "price": "السعر",
     "outOfStock": "غير متوفر"
@@ -57,7 +59,18 @@
     "historyTitle": "طلباتك السابقة",
     "noOrders": "لم تقم بطلب أي شيء بعد.",
     "itemsCount": "وجبات",
-    "trackBtn": "تتبع مباشر"
+    "trackBtn": "تتبع مباشر",
+    "trackDashboard": "تتبع طلباتك",
+    "activeOrders": "الطلبات النشطة",
+    "noActiveOrders": "لا توجد طلبات نشطة",
+    "enterOrderId": "أدخل رقم الطلب للتتبع المباشر",
+    "orderIdPlaceholder": "أدخل أو الصق رقم الطلب هنا...",
+    "backToDashboard": "العودة إلى لوحة التتبع",
+    "orderSearchBtn": "تتبع الطلب",
+    "orderSearchError": "يرجى إدخال رقم طلب صحيح.",
+    "quickShortcuts": "روابط سريعة",
+    "browseMenu": "تصفح القائمة",
+    "viewPastOrders": "عرض الطلبات السابقة"
   },
   "admin": {
     "panelTitle": "لوحة إدارة النظام",
@@ -68,7 +81,15 @@
     "items": "الطلبات",
     "actions": "الإجراءات",
     "addProduct": "إضافة منتج",
-    "addCategory": "إضافة قسم"
+    "addCategory": "إضافة قسم",
+    "catalogTitle": "إدارة كتالوج القائمة",
+    "catalogSearchPlaceholder": "ابحث عن أطباق الكتالوج...",
+    "catalogNoMatch": "لا توجد منتجات في الكتالوج تطابق معايير البحث أو التصفية الخاصة بك.",
+    "tableProduct": "المنتج",
+    "tableCategory": "الفئة",
+    "tableDescription": "الوصف",
+    "tablePrice": "السعر",
+    "filterAllCategories": "جميع الفئات"
   },
   "status": {
     "Pending": "في انتظار الموافقة",

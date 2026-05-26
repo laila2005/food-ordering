@@ -39,6 +39,12 @@ namespace FoodOrdering.WebAPI.Controllers
                 return Unauthorized();
             }
 
+            var userExists = await _context.Users.AnyAsync(u => u.Id == userId);
+            if (!userExists)
+            {
+                return Unauthorized(new { Message = "Your session has expired or your user account no longer exists. Please log out and log back in." });
+            }
+
             if (dto.Items == null || !dto.Items.Any())
             {
                 return BadRequest(new { Message = "Cart must contain at least one item." });
@@ -114,6 +120,12 @@ namespace FoodOrdering.WebAPI.Controllers
                 return Unauthorized();
             }
 
+            var userExists = await _context.Users.AnyAsync(u => u.Id == userId);
+            if (!userExists)
+            {
+                return Unauthorized(new { Message = "User account not found. Please log out and log back in." });
+            }
+
             var orders = await _context.Orders
                 .Include(o => o.OrderItems)
                 .ThenInclude(oi => oi.Product)
@@ -155,6 +167,12 @@ namespace FoodOrdering.WebAPI.Controllers
             if (string.IsNullOrEmpty(userIdStr) || !Guid.TryParse(userIdStr, out var userId))
             {
                 return Unauthorized();
+            }
+
+            var userExists = await _context.Users.AnyAsync(u => u.Id == userId);
+            if (!userExists)
+            {
+                return Unauthorized(new { Message = "User account not found. Please log out and log back in." });
             }
 
             var order = await _context.Orders

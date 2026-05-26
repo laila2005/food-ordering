@@ -13,35 +13,39 @@ export const useCartStore = create((set, get) => ({
     return [];
   })(),
   
-  addItem: (product) => {
+  addItem: (product, customNotes = '') => {
     const currentItems = get().items;
-    const existing = currentItems.find(item => item.product.id === product.id);
+    const existing = currentItems.find(item => item.product.id === product.id && (item.customNotes || '') === customNotes);
     
     let updatedItems;
     if (existing) {
       updatedItems = currentItems.map(item =>
-        item.product.id === product.id ? { ...item, quantity: item.quantity + 1 } : item
+        (item.product.id === product.id && (item.customNotes || '') === customNotes)
+          ? { ...item, quantity: item.quantity + 1 }
+          : item
       );
     } else {
-      updatedItems = [...currentItems, { product, quantity: 1 }];
+      updatedItems = [...currentItems, { product, quantity: 1, customNotes }];
     }
     
     localStorage.setItem('cart', JSON.stringify(updatedItems));
     set({ items: updatedItems });
   },
   
-  removeItem: (productId) => {
+  removeItem: (productId, customNotes = '') => {
     const currentItems = get().items;
-    const existing = currentItems.find(item => item.product.id === productId);
+    const existing = currentItems.find(item => item.product.id === productId && (item.customNotes || '') === customNotes);
     
     if (!existing) return;
     
     let updatedItems;
     if (existing.quantity === 1) {
-      updatedItems = currentItems.filter(item => item.product.id !== productId);
+      updatedItems = currentItems.filter(item => !(item.product.id === productId && (item.customNotes || '') === customNotes));
     } else {
       updatedItems = currentItems.map(item =>
-        item.product.id === productId ? { ...item, quantity: item.quantity - 1 } : item
+        (item.product.id === productId && (item.customNotes || '') === customNotes)
+          ? { ...item, quantity: item.quantity - 1 }
+          : item
       );
     }
     

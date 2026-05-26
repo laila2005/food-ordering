@@ -6,7 +6,9 @@ import { CartDrawer } from './features/cart/CartDrawer';
 import { MenuGrid } from './features/menu/MenuGrid';
 import { OrderHistory } from './features/orders/OrderHistory';
 import { OrderTracking } from './features/orders/OrderTracking';
+import { TrackDashboard } from './features/orders/TrackDashboard';
 import { AdminDashboard } from './features/admin/AdminDashboard';
+import { useAuthStore } from './store/useAuthStore';
 import './i18n/i18n'; // Load dynamic translation files
 import './App.css';
 
@@ -17,6 +19,8 @@ export default function App() {
   const [isAuthOpen, setIsAuthOpen] = useState(false);
   const [isCartOpen, setIsCartOpen] = useState(false);
 
+  const { user } = useAuthStore();
+
   useEffect(() => {
     // Sync document attributes with active i18next language configurations
     const currentLang = i18n.language || 'en';
@@ -24,6 +28,13 @@ export default function App() {
     document.documentElement.dir = direction;
     document.documentElement.lang = currentLang;
   }, [i18n.language]);
+
+  useEffect(() => {
+    // Route guard: Redirect standard users away from the Admin Dashboard
+    if (activePage === 'admin' && user?.role !== 'Admin') {
+      setActivePage('menu');
+    }
+  }, [user, activePage]);
 
   const handleTrackOrder = (orderId) => {
     setSelectedOrderId(orderId);
@@ -36,18 +47,35 @@ export default function App() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-50 text-slate-800 transition-colors duration-300">
+    <div className="min-h-screen bg-bg-app text-text-main transition-colors duration-300">
       <Navbar
         onOpenAuth={() => setIsAuthOpen(true)}
         onToggleCart={() => setIsCartOpen(!isCartOpen)}
-        onNavigate={(page) => setActivePage(page)}
+        onNavigate={(page) => {
+          setActivePage(page);
+          if (page === 'tracking') {
+            setSelectedOrderId(null);
+          }
+        }}
       />
 
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 pb-24 sm:pb-8">
-        {activePage === 'menu' && <MenuGrid onProductAdded={() => setIsCartOpen(true)} />}
+        {activePage === 'menu' && <MenuGrid onProductAdded={() => {}} />}
         {activePage === 'orders' && <OrderHistory onTrackOrder={handleTrackOrder} />}
-        {activePage === 'tracking' && selectedOrderId && <OrderTracking orderId={selectedOrderId} />}
-        {activePage === 'admin' && <AdminDashboard />}
+        {activePage === 'tracking' && (
+          selectedOrderId ? (
+            <OrderTracking 
+              orderId={selectedOrderId} 
+              onBack={() => setSelectedOrderId(null)} 
+            />
+          ) : (
+            <TrackDashboard 
+              onTrackOrder={handleTrackOrder} 
+              onNavigate={(page) => setActivePage(page)} 
+            />
+          )
+        )}
+        {activePage === 'admin' && user?.role === 'Admin' && <AdminDashboard />}
       </main>
 
       {/* Overlays */}
