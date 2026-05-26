@@ -177,7 +177,7 @@ The prototype has been dramatically enhanced to an enterprise-grade standard, de
    - Refactored customer-facing and administrator-facing search panels to use native logical CSS positioning (`start`, `end`, `ps`, `pe`), ensuring proper side shifts for magnifying and close buttons in Arabic RTL layouts.
    - Added complete bi-directional translation sets in standard `en.json` and `ar.json` structures, making the entire product catalog workflow localized.
 9. **Interactive Client Favorites Viewing & Filtering:**
-   - Introduced a dedicated, HSL-themed "Favorites (❤️)" tab option inside the categories filter bar in the client menu grid.
+   - Positioned an elegant, responsive "Favorites" toggle button right next to the customer search input, isolating it entirely from food categories.
    - Configured instant client-side filtering against local storage arrays (`fav_products`), along with an active empty state guide dialog to invite users to save their favorite dishes.
 10. **Dynamic Dessert Menu Seeding & Database Resilience:**
     - Upgraded `DbSeeder.cs` with a conditional database query engine that safely detects and adds the **Dessert** category and premium dessert products (Chocolate Fudge Cake, Strawberry Cheesecake) onto already-populated SQLite instances without dropping tables or losing live order transaction databases.

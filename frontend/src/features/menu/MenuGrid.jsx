@@ -86,24 +86,45 @@ export function MenuGrid({ onProductAdded }) {
         </p>
       </div>
 
-      {/* Dynamic Search Bar */}
-      <div className="max-w-md mx-auto relative group px-2">
-        <Search className="absolute start-6 top-1/2 -translate-y-1/2 text-text-muted transition-colors group-focus-within:text-brand-primary" size={18} />
-        <input
-          type="text"
-          placeholder={i18n.language.startsWith('ar') ? 'ابحث عن وجبتك اللذيذة...' : 'Search for your favorite food...'}
-          value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
-          className="w-full ps-12 pe-10 py-3.5 bg-bg-card border border-border-card rounded-[22px] text-xs text-text-main font-semibold placeholder:text-text-muted/65 focus:outline-none focus:ring-4 focus:ring-brand-primary/10 focus:border-brand-primary transition-all shadow-xs text-start"
-        />
-        {searchQuery && (
-          <button
-            onClick={() => setSearchQuery('')}
-            className="absolute end-6 top-1/2 -translate-y-1/2 text-text-muted hover:text-text-main p-0.5 rounded-full hover:bg-bg-app transition-colors cursor-pointer"
-          >
-            <X size={14} />
-          </button>
-        )}
+      {/* Search & Favorites Filtering Container */}
+      <div className="max-w-lg mx-auto flex gap-3 items-center px-2">
+        <div className="relative flex-1 group">
+          <Search className="absolute start-6 top-1/2 -translate-y-1/2 text-text-muted transition-colors group-focus-within:text-brand-primary" size={18} />
+          <input
+            type="text"
+            placeholder={i18n.language.startsWith('ar') ? 'ابحث عن وجبتك اللذيذة...' : 'Search for your favorite food...'}
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            className="w-full ps-12 pe-10 py-3.5 bg-bg-card border border-border-card rounded-[22px] text-xs text-text-main font-semibold placeholder:text-text-muted/65 focus:outline-none focus:ring-4 focus:ring-brand-primary/10 focus:border-brand-primary transition-all shadow-xs text-start"
+          />
+          {searchQuery && (
+            <button
+              onClick={() => setSearchQuery('')}
+              className="absolute end-6 top-1/2 -translate-y-1/2 text-text-muted hover:text-text-main p-0.5 rounded-full hover:bg-bg-app transition-colors cursor-pointer"
+            >
+              <X size={14} />
+            </button>
+          )}
+        </div>
+
+        {/* Dynamic Favorites Filter Toggle */}
+        <button
+          onClick={() => {
+            setSelectedCategory(selectedCategory === 'favorites' ? null : 'favorites');
+            setSearchQuery('');
+          }}
+          className={`flex-shrink-0 p-3.5 rounded-[22px] border transition-all duration-300 active:scale-95 cursor-pointer flex items-center justify-center gap-2 shadow-xs ${
+            selectedCategory === 'favorites'
+              ? 'bg-red-500 text-white border-red-500 shadow-md shadow-red-500/20'
+              : 'bg-bg-card text-text-muted hover:text-red-500 border-border-card'
+          }`}
+          title={i18n.language.startsWith('ar') ? 'عرض المفضلة فقط' : 'Show favorites only'}
+        >
+          <Heart size={18} fill={selectedCategory === 'favorites' ? 'currentColor' : 'none'} />
+          <span className="hidden sm:inline text-xs font-black uppercase tracking-wider">
+            {t('menu.favorites')}
+          </span>
+        </button>
       </div>
 
       {/* Categories Tabs Selector */}
@@ -121,24 +142,6 @@ export function MenuGrid({ onProductAdded }) {
           }`}
         >
           {t('menu.all')}
-        </button>
-
-        {/* Favorites Option */}
-        <button
-          onClick={() => {
-            setSelectedCategory('favorites');
-            setSearchQuery('');
-          }}
-          className={`flex-shrink-0 px-5 py-2.5 rounded-2xl text-xs font-black tracking-wide uppercase transition-all duration-300 border cursor-pointer ${
-            selectedCategory === 'favorites'
-              ? 'bg-red-500 text-white border-red-500 shadow-md shadow-red-500/20 active:scale-95'
-              : 'bg-bg-card text-text-muted hover:text-red-500 hover:bg-bg-app border-border-card'
-          }`}
-        >
-          <span className="flex items-center gap-1.5">
-            <Heart size={12} fill={selectedCategory === 'favorites' ? 'currentColor' : 'none'} />
-            <span>{t('menu.favorites')}</span>
-          </span>
         </button>
 
         {/* Dynamic Categories */}
