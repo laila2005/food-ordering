@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { useAuthStore } from '../../store/useAuthStore';
 import { useToast } from '../../components/common/ToastProvider';
 import * as signalR from '@microsoft/signalr';
+import { STATIC_CATEGORIES, STATIC_PRODUCTS, STATIC_ORDERS } from '../../store/staticCatalog';
 import { 
   ShieldCheck, 
   Truck, 
@@ -85,7 +86,14 @@ export function AdminDashboard() {
         setSelectedCat(catsData[0].id);
       }
     } catch (err) {
-      setError(err.message);
+      console.warn('API Offline/Mixed Content, falling back to static dashboard:', err);
+      setOrders(STATIC_ORDERS);
+      setCategories(STATIC_CATEGORIES);
+      setProducts(STATIC_PRODUCTS);
+      if (STATIC_CATEGORIES.length > 0 && !selectedCat) {
+        setSelectedCat(STATIC_CATEGORIES[0].id);
+      }
+      setError(null);
     } finally {
       setLoading(false);
     }

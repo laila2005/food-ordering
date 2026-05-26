@@ -5,6 +5,7 @@ import { ProductCardSkeleton } from '../../components/common/SkeletonLoader';
 import { ProductDetailsModal } from './ProductDetailsModal';
 import { useToast } from '../../components/common/ToastProvider';
 import { Search, X, UtensilsCrossed, Heart } from 'lucide-react';
+import { STATIC_CATEGORIES, STATIC_PRODUCTS } from '../../store/staticCatalog';
 
 export function MenuGrid({ onProductAdded }) {
   const { t, i18n } = useTranslation();
@@ -42,8 +43,14 @@ export function MenuGrid({ onProductAdded }) {
         setCategories(catsData);
         setProducts(prodsData);
       } catch (err) {
-        console.error(err);
-        setError(err.message);
+        console.warn('API Offline/Mixed Content, falling back to static catalog:', err);
+        setCategories(STATIC_CATEGORIES);
+        let staticProds = STATIC_PRODUCTS;
+        if (selectedCategory && selectedCategory !== 'favorites') {
+          staticProds = STATIC_PRODUCTS.filter(p => p.categoryId === selectedCategory);
+        }
+        setProducts(staticProds);
+        setError(null);
       } finally {
         setLoading(false);
       }
