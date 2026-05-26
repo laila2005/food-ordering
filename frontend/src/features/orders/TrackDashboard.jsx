@@ -14,6 +14,7 @@ import {
   PackageCheck,
   ClipboardList
 } from 'lucide-react';
+import { STATIC_ORDERS } from '../../store/staticCatalog';
 
 export function TrackDashboard({ onTrackOrder, onNavigate }) {
   const { t, i18n } = useTranslation();
@@ -51,7 +52,16 @@ export function TrackDashboard({ onTrackOrder, onNavigate }) {
         const active = data.filter(order => order.status !== 'Delivered' && order.status !== 'Cancelled');
         setActiveOrders(active);
       } catch (err) {
-        setError(err.message);
+        console.warn('API fetch active orders failed, looking for offline fallback:', err);
+        if (err.message.includes('Failed to fetch') || err.message.includes('NetworkError') || err.message.includes('Failed') || err.message.includes('fetch')) {
+          const localOrders = JSON.parse(localStorage.getItem('mock_orders') || '[]');
+          const allOrders = [...localOrders, ...STATIC_ORDERS];
+          const active = allOrders.filter(order => order.status !== 'Delivered' && order.status !== 'Cancelled');
+          setActiveOrders(active);
+          setError(null);
+        } else {
+          setError(err.message);
+        }
       } finally {
         setLoading(false);
       }
