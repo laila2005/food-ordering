@@ -1,0 +1,73 @@
+{
+  "nav": {
+    "title": "كويك بايت",
+    "menu": "القائمة",
+    "cart": "السلة",
+    "login": "تسجيل الدخول",
+    "register": "إنشاء حساب",
+    "dashboard": "لوحة التحكم",
+    "logout": "خروج",
+    "myOrders": "طلباتي"
+  },
+  "auth": {
+    "loginTitle": "مرحباً بعودتك",
+    "registerTitle": "إنشاء حساب جديد",
+    "email": "البريد الإلكتروني",
+    "password": "كلمة المرور",
+    "fullName": "الاسم الكامل",
+    "loginBtn": "دخول",
+    "registerBtn": "تسجيل",
+    "noAccount": "ليس لديك حساب؟ سجل الآن",
+    "hasAccount": "لديك حساب بالفعل؟ سجل دخول",
+    "adminBadge": "مسؤول"
+  },
+  "menu": {
+    "title": "قائمتنا اللذيذة",
+    "subtitle": "مكونات طازجة، توصيل سريع، طعم رائع",
+    "all": "جميع الأقسام",
+    "addToCart": "إضافة إلى السلة",
+    "price": "السعر",
+    "outOfStock": "غير متوفر"
+  },
+  "cart": {
+    "title": "طلبك",
+    "empty": "سلتك فارغة. أضف بعض الوجبات اللذيذة!",
+    "total": "المبلغ الإجمالي",
+    "address": "عنوان التوصيل",
+    "paymentMethod": "طريقة الدفع",
+    "cod": "الدفع عند الاستلام",
+    "card": "بطاقة ائتمان (تجريبي Stripe)",
+    "checkoutBtn": "إتمام الطلب",
+    "success": "تم تقديم الطلب بنجاح!",
+    "close": "إغلاق"
+  },
+  "orders": {
+    "trackingTitle": "تتبع الطلب مباشرة",
+    "orderId": "رقم الطلب",
+    "status": "الحالة الحالية",
+    "address": "العنوان",
+    "summary": "ملخص الطلب",
+    "historyTitle": "طلباتك السابقة",
+    "noOrders": "لم تقم بطلب أي شيء بعد.",
+    "itemsCount": "وجبات",
+    "trackBtn": "تتبع مباشر"
+  },
+  "admin": {
+    "panelTitle": "لوحة إدارة النظام",
+    "ordersCount": "الطلبات النشطة",
+    "incomingOrders": "قائمة الطلبات الواردة",
+    "updateStatus": "تحديث الحالة",
+    "customer": "العميل",
+    "items": "الطلبات",
+    "actions": "الإجراءات",
+    "addProduct": "إضافة منتج",
+    "addCategory": "إضافة قسم"
+  },
+  "status": {
+    "Pending": "في انتظار الموافقة",
+    "Preparing": "قيد التحضير في المطبخ",
+    "OutForDelivery": "خارج للتوصيل",
+    "Delivered": "تم التوصيل! بالهناء والشفاء",
+    "Cancelled": "ملغي"
+  }
+}

@@ -1,0 +1,73 @@
+{
+  "nav": {
+    "title": "QuickBite",
+    "menu": "Menu",
+    "cart": "Cart",
+    "login": "Login",
+    "register": "Register",
+    "dashboard": "Admin Panel",
+    "logout": "Logout",
+    "myOrders": "My Orders"
+  },
+  "auth": {
+    "loginTitle": "Welcome Back",
+    "registerTitle": "Create Account",
+    "email": "Email Address",
+    "password": "Password",
+    "fullName": "Full Name",
+    "loginBtn": "Sign In",
+    "registerBtn": "Sign Up",
+    "noAccount": "Don't have an account? Sign Up",
+    "hasAccount": "Already have an account? Sign In",
+    "adminBadge": "Admin"
+  },
+  "menu": {
+    "title": "Our Delicious Menu",
+    "subtitle": "Fresh ingredients, fast delivery, outstanding taste",
+    "all": "All Categories",
+    "addToCart": "Add to Cart",
+    "price": "Price",
+    "outOfStock": "Unavailable"
+  },
+  "cart": {
+    "title": "Your Order",
+    "empty": "Your cart is empty. Add some delicious items!",
+    "total": "Total Amount",
+    "address": "Delivery Address",
+    "paymentMethod": "Payment Method",
+    "cod": "Cash on Delivery",
+    "card": "Credit Card (Stripe Mock)",
+    "checkoutBtn": "Place Order",
+    "success": "Order placed successfully!",
+    "close": "Close"
+  },
+  "orders": {
+    "trackingTitle": "Live Order Tracking",
+    "orderId": "Order ID",
+    "status": "Current Status",
+    "address": "Delivering to",
+    "summary": "Order Summary",
+    "historyTitle": "Your Past Orders",
+    "noOrders": "You haven't ordered anything yet.",
+    "itemsCount": "items",
+    "trackBtn": "Track Live"
+  },
+  "admin": {
+    "panelTitle": "Admin Dashboard",
+    "ordersCount": "Active Orders",
+    "incomingOrders": "Incoming Order Feed",
+    "updateStatus": "Update Status",
+    "customer": "Customer",
+    "items": "Items",
+    "actions": "Actions",
+    "addProduct": "Add Product",
+    "addCategory": "Add Category"
+  },
+  "status": {
+    "Pending": "Pending Approval",
+    "Preparing": "Preparing in Kitchen",
+    "OutForDelivery": "Out for Delivery",
+    "Delivered": "Delivered! Bon Appétit",
+    "Cancelled": "Cancelled"
+  }
+}
