@@ -97,12 +97,21 @@ export function OrderTracking({ orderId }) {
         ) : (
           /* Timeline Steps */
           <div className="relative">
-            {/* Progress bar line */}
+            {/* Progress bar line - Horizontal for desktop, Vertical for mobile */}
             <div className="absolute top-6 start-6 end-6 h-1 bg-slate-100 -z-10 hidden sm:block">
               <div
                 className="h-full bg-gradient-to-r from-amber-500 to-orange-500 transition-all duration-700"
                 style={{
                   width: `${(currentStepIndex / (steps.length - 1)) * 100}%`
+                }}
+              />
+            </div>
+
+            <div className="absolute top-6 bottom-6 start-6 w-1 bg-slate-100 -z-10 sm:hidden">
+              <div
+                className="w-full bg-gradient-to-b from-amber-500 to-orange-500 transition-all duration-700"
+                style={{
+                  height: `${(currentStepIndex / (steps.length - 1)) * 100}%`
                 }}
               />
             </div>

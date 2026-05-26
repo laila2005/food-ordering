@@ -43,7 +43,7 @@ export default function App() {
         onNavigate={(page) => setActivePage(page)}
       />
 
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 pb-24 sm:pb-8">
         {activePage === 'menu' && <MenuGrid onProductAdded={() => setIsCartOpen(true)} />}
         {activePage === 'orders' && <OrderHistory onTrackOrder={handleTrackOrder} />}
         {activePage === 'tracking' && selectedOrderId && <OrderTracking orderId={selectedOrderId} />}
