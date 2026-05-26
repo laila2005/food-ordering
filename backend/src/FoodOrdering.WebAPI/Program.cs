@@ -107,9 +107,10 @@ using (var scope = app.Services.CreateScope())
     try
     {
         var context = services.GetRequiredService<ApplicationDbContext>();
+        var passwordHasher = services.GetRequiredService<IPasswordHasher>();
         // Automatically apply database schema and seed the initial menu catalog
         await context.Database.EnsureCreatedAsync();
-        await DbSeeder.SeedAsync(context);
+        await DbSeeder.SeedAsync(context, passwordHasher);
     }
     catch (Exception ex)
     {

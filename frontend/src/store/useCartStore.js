@@ -1,7 +1,17 @@
 import { create } from 'zustand';
 
 export const useCartStore = create((set, get) => ({
-  items: JSON.parse(localStorage.getItem('cart')) || [],
+  items: (() => {
+    try {
+      const parsed = JSON.parse(localStorage.getItem('cart'));
+      if (Array.isArray(parsed)) {
+        return parsed.filter(item => item && item.product && typeof item.product.id !== 'undefined');
+      }
+    } catch (e) {
+      console.error('Failed to parse cart from localStorage:', e);
+    }
+    return [];
+  })(),
   
   addItem: (product) => {
     const currentItems = get().items;

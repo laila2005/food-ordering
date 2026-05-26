@@ -464,15 +464,16 @@ export function AdminDashboard() {
               </thead>
               <tbody className="divide-y divide-slate-100 text-xs font-bold text-slate-600">
                 {products.map((prod) => {
-                  const prodName = prod.name[currentLang] || prod.name['en'] || '';
-                  const prodDesc = prod.description[currentLang] || prod.description['en'] || '';
+                  if (!prod) return null;
+                  const prodName = prod.name?.[currentLang] || prod.name?.['en'] || '';
+                  const prodDesc = prod.description?.[currentLang] || prod.description?.['en'] || '';
                   return (
                     <tr key={prod.id} className="hover:bg-slate-50/30 transition-colors">
                       <td className="px-6 py-4 flex items-center gap-3">
                         <img src={prod.imageUrl} alt={prodName} className="w-10 h-10 rounded-xl object-cover bg-slate-100 flex-shrink-0" />
                         <div>
                           <span className="font-extrabold text-slate-800 block">{prodName}</span>
-                          <span className="text-[10px] text-slate-400 font-semibold">{prod.name.ar}</span>
+                          <span className="text-[10px] text-slate-400 font-semibold">{prod.name?.ar || ''}</span>
                         </div>
                       </td>
                       <td className="px-6 py-4 max-w-xs truncate text-slate-400 leading-normal">

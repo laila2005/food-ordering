@@ -6,13 +6,43 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using FoodOrdering.Domain.Entities;
 
+using FoodOrdering.Application.Interfaces;
+using FoodOrdering.Domain.Enums;
+
 namespace FoodOrdering.Infrastructure.Data
 {
     public static class DbSeeder
     {
-        public static async Task SeedAsync(ApplicationDbContext context)
+        public static async Task SeedAsync(ApplicationDbContext context, IPasswordHasher passwordHasher)
         {
             await context.Database.EnsureCreatedAsync();
+
+            // Seed Default System Accounts
+            if (!await context.Users.AnyAsync(u => u.Email.ToLower() == "admin@quickbite.com"))
+            {
+                var adminUser = new User
+                {
+                    Email = "admin@quickbite.com",
+                    FullName = "System Admin",
+                    PasswordHash = passwordHasher.HashPassword("Admin123!"),
+                    Role = Role.Admin
+                };
+                context.Users.Add(adminUser);
+            }
+
+            if (!await context.Users.AnyAsync(u => u.Email.ToLower() == "customer@quickbite.com"))
+            {
+                var customerUser = new User
+                {
+                    Email = "customer@quickbite.com",
+                    FullName = "Jane Customer",
+                    PasswordHash = passwordHasher.HashPassword("Customer123!"),
+                    Role = Role.Customer
+                };
+                context.Users.Add(customerUser);
+            }
+
+            await context.SaveChangesAsync();
 
             if (await context.Categories.AnyAsync())
             {

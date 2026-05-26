@@ -174,7 +174,7 @@ export function OrderTracking({ orderId }) {
               </h3>
               <div className="bg-slate-50/50 p-4 border border-slate-100 rounded-2xl space-y-3">
                 {orderDetails.items.map((item, idx) => {
-                  const prodName = item.productName[currentLang] || item.productName['en'] || '';
+                  const prodName = item.productName?.[currentLang] || item.productName?.['en'] || '';
                   return (
                     <div key={idx} className="flex justify-between items-center text-xs font-bold">
                       <span className="text-slate-600">

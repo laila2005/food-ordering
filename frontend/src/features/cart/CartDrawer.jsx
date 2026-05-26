@@ -114,7 +114,8 @@ export function CartDrawer({ isOpen, onClose, onOpenAuth, onCheckoutSuccess }) {
             ) : (
               <div className="space-y-4">
                 {items.map((item) => {
-                  const prodName = item.product.name[currentLang] || item.product.name['en'] || '';
+                  if (!item || !item.product) return null;
+                  const prodName = item.product.name?.[currentLang] || item.product.name?.['en'] || '';
                   return (
                     <div
                       key={item.product.id}
@@ -130,7 +131,7 @@ export function CartDrawer({ isOpen, onClose, onOpenAuth, onCheckoutSuccess }) {
                           {prodName}
                         </h4>
                         <span className="text-xs font-bold text-slate-400 block mt-0.5">
-                          ${item.product.price.toFixed(2)}
+                          ${(item.product.price || 0).toFixed(2)}
                         </span>
                       </div>
 
