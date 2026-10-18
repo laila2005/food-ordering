@@ -1,4 +1,4 @@
-# Online Food Ordering Web Application (24-Hour Technical Assessment)
+# QuickBite Online Food Ordering Web Application (24-Hour Technical Assessment)
 
 An enterprise-grade, real-time, multi-lingual Online Food Ordering prototype built from scratch under a strict 24-hour deadline. The application emphasizes clean architecture, database optimization, dynamic Right-to-Left (RTL) layout switching, and live bi-directional socket streams.
 
